@@ -13,9 +13,7 @@ public class LoginService {
     public LoginResultCode login(LoginType loginType, long userId, String token) {
 
         String email = googleLoginClient.check(token);
-
         User user = userRepository.find(userId);
-
         if (user.getEmail().equals(email)) {
             return LoginResultCode.OK;
         } else {
