@@ -36,9 +36,9 @@ public class LoginService {
                 return LoginResultCode.FAILED;
             }
 
-        } else
+        }
 
-            throw new RuntimeException("Unknown Login Type: " + loginType);
+        throw new RuntimeException("Unknown Login Type: " + loginType);
 
     }
 }
