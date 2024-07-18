@@ -10,7 +10,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 class LoginServiceTest {
 
     @Test
-    void google_login() {
+    void google_login_ok() {
 
         GoogleLoginClient googleLoginClient = Mockito.mock(GoogleLoginClient.class);
         Mockito.when(googleLoginClient.check(anyString())).thenReturn("kukumama@gmail.com");
@@ -23,6 +23,23 @@ class LoginServiceTest {
         LoginResultCode loginResultCode = loginService.login(GOOGLE, 1L, "google_login_token");
 
         Assertions.assertThat(loginResultCode).isEqualTo(LoginResultCode.OK);
+
+    }
+
+    @Test
+    void google_login_failed() {
+
+        GoogleLoginClient googleLoginClient = Mockito.mock(GoogleLoginClient.class);
+        Mockito.when(googleLoginClient.check(anyString())).thenReturn("micky_mouse@gmail.com");
+
+        UserRepository userRepository = new DummyUserRepository();
+        userRepository.add(new User(1L, "kukumama@gmail.com"));
+
+        LoginService loginService = new LoginService(googleLoginClient, userRepository);
+
+        LoginResultCode loginResultCode = loginService.login(GOOGLE, 1L, "google_login_token");
+
+        Assertions.assertThat(loginResultCode).isEqualTo(LoginResultCode.FAILED);
 
     }
 }
