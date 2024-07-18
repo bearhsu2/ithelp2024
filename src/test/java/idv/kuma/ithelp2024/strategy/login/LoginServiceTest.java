@@ -7,6 +7,7 @@ import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 
 import static idv.kuma.ithelp2024.strategy.login.FacebookLoginResult.SUCCESSFUL;
+import static idv.kuma.ithelp2024.strategy.login.FacebookLoginResult.UNSUCCESSFUL;
 import static idv.kuma.ithelp2024.strategy.login.LoginType.FACEBOOK;
 import static idv.kuma.ithelp2024.strategy.login.LoginType.GOOGLE;
 
@@ -20,20 +21,24 @@ class LoginServiceTest {
     private LoginResultCode loginResultCode;
 
     @Test
-    void facebook_login_ok() {
+    void facebook_login_failed() {
 
         given_user(1L, "kukumama@gmail.com");
 
-        Mockito.when(facebookLoginClient.verify("facebook_login_token", "kukumama@gmail.com")).thenReturn(SUCCESSFUL);
+        given_facebook_login_failed_for("facebook_login_token", "kukumama@gmail.com");
 
         when_login(FACEBOOK, 1L, "facebook_login_token");
 
-        then_result().isEqualTo(LoginResultCode.OK);
+        then_result().isEqualTo(LoginResultCode.FAILED);
 
     }
 
     private void given_user(long userId, String email) {
         userRepository.add(new User(userId, email));
+    }
+
+    private void given_facebook_login_failed_for(String token, String email) {
+        Mockito.when(facebookLoginClient.verify(token, email)).thenReturn(UNSUCCESSFUL);
     }
 
     private void when_login(LoginType loginType, long userId, String token) {
@@ -42,6 +47,23 @@ class LoginServiceTest {
 
     private AbstractComparableAssert<?, LoginResultCode> then_result() {
         return Assertions.assertThat(loginResultCode);
+    }
+
+    @Test
+    void facebook_login_ok() {
+
+        given_user(1L, "kukumama@gmail.com");
+
+        given_facebook_login_successful_for("facebook_login_token", "kukumama@gmail.com");
+
+        when_login(FACEBOOK, 1L, "facebook_login_token");
+
+        then_result().isEqualTo(LoginResultCode.OK);
+
+    }
+
+    private void given_facebook_login_successful_for(String token, String email) {
+        Mockito.when(facebookLoginClient.verify(token, email)).thenReturn(SUCCESSFUL);
     }
 
     @Test
