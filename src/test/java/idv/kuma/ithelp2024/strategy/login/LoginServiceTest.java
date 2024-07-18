@@ -1,5 +1,6 @@
 package idv.kuma.ithelp2024.strategy.login;
 
+import org.assertj.core.api.AbstractComparableAssert;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -23,7 +24,7 @@ class LoginServiceTest {
 
         when_login(GOOGLE, 1L, "google_login_token");
 
-        Assertions.assertThat(loginResultCode).isEqualTo(LoginResultCode.OK);
+        then_result().isEqualTo(LoginResultCode.OK);
 
     }
 
@@ -39,6 +40,10 @@ class LoginServiceTest {
         loginResultCode = loginService.login(loginType, userId, token);
     }
 
+    private AbstractComparableAssert<?, LoginResultCode> then_result() {
+        return Assertions.assertThat(loginResultCode);
+    }
+
     @Test
     void google_login_failed() {
 
@@ -48,7 +53,7 @@ class LoginServiceTest {
 
         when_login(GOOGLE, 1L, "google_login_token");
 
-        Assertions.assertThat(loginResultCode).isEqualTo(LoginResultCode.FAILED);
+        then_result().isEqualTo(LoginResultCode.FAILED);
 
     }
 }
