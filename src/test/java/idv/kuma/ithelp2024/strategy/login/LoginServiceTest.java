@@ -6,7 +6,14 @@ import org.junit.jupiter.api.Test;
 class LoginServiceTest {
 
     @Test
-    void name() {
-        Assertions.assertThat(1).isEqualTo(1);
+    void google_login_ok() {
+
+
+        LoginService sut = new LoginService();
+
+        LoginResultCode actual = sut.login(1L, "google_token");
+
+        Assertions.assertThat(actual).isEqualTo(LoginResultCode.OK);
+
     }
 }
