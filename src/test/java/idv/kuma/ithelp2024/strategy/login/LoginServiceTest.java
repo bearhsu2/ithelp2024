@@ -1,5 +1,6 @@
 package idv.kuma.ithelp2024.strategy.login;
 
+import org.assertj.core.api.AbstractComparableAssert;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -10,21 +11,21 @@ import static org.mockito.ArgumentMatchers.anyString;
 class LoginServiceTest {
 
     private GoogleLoginClient googleLoginClient = Mockito.mock(GoogleLoginClient.class);
+    private DummyUserRepository userRepository = new DummyUserRepository();
+
+    private LoginService sut = new LoginService(
+            userRepository, googleLoginClient
+    );
+    private LoginResultCode actual;
 
     @Test
     void google_login_fail() {
 
         given_google_token_belongs_to("tommy@gmail.com");
 
-        UserRepository userRepository = new DummyUserRepository();
-        User user = new User(1L, "kuma@gmail.com");
-        userRepository.save(user);
+        given_user(user(1L, "kuma@gmail.com"));
 
-        LoginService sut = new LoginService(
-                userRepository, googleLoginClient
-        );
-
-        LoginResultCode actual = sut.login(1L, "google_token");
+        when_login(1L, "google_token");
 
         Assertions.assertThat(actual).isEqualTo(LoginResultCode.FAIL);
 
@@ -34,22 +35,32 @@ class LoginServiceTest {
         return Mockito.when(googleLoginClient.check(anyString())).thenReturn(email);
     }
 
+    private void given_user(User user) {
+        userRepository.save(user);
+    }
+
+    private User user(long id, String email) {
+        return new User(id, email);
+    }
+
+    private void when_login(long userId, String token) {
+        actual = sut.login(userId, token);
+    }
+
     @Test
     void google_login_ok() {
 
         given_google_token_belongs_to("kuma@gmail.com");
 
-        UserRepository userRepository = new DummyUserRepository();
-        User user = new User(1L, "kuma@gmail.com");
-        userRepository.save(user);
+        given_user(user(1L, "kuma@gmail.com"));
 
-        LoginService sut = new LoginService(
-                userRepository, googleLoginClient
-        );
+        when_login(1L, "google_token");
 
-        LoginResultCode actual = sut.login(1L, "google_token");
+        then_result_is(LoginResultCode.OK);
 
-        Assertions.assertThat(actual).isEqualTo(LoginResultCode.OK);
+    }
 
+    private AbstractComparableAssert<?, LoginResultCode> then_result_is(LoginResultCode result) {
+        return Assertions.assertThat(actual).isEqualTo(result);
     }
 }
