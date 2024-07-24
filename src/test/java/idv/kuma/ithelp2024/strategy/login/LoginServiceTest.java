@@ -12,11 +12,11 @@ class LoginServiceTest {
 
     private GoogleLoginClient googleLoginClient = Mockito.mock(GoogleLoginClient.class);
     private DummyUserRepository userRepository = new DummyUserRepository();
-
-    private LoginService sut = new LoginService(
-            userRepository, googleLoginClient
-    );
     private LoginResultCode actual;
+    private FacebookLoginClient facebookLoginClient = Mockito.mock(FacebookLoginClient.class);
+    private LoginService sut = new LoginService(
+            userRepository, googleLoginClient, facebookLoginClient
+    );
 
     @Test
     void google_login_fail() {
@@ -25,7 +25,7 @@ class LoginServiceTest {
 
         given_user(user(1L, "kuma@gmail.com"));
 
-        when_login(1L, "google_token");
+        when_login(LoginType.GOOGLE, 1L, "google_token");
 
         Assertions.assertThat(actual).isEqualTo(LoginResultCode.FAIL);
 
@@ -43,8 +43,8 @@ class LoginServiceTest {
         return new User(id, email);
     }
 
-    private void when_login(long userId, String token) {
-        actual = sut.login(userId, token);
+    private void when_login(LoginType loginType, long userId, String token) {
+        actual = sut.login(loginType, userId, token);
     }
 
     @Test
@@ -53,11 +53,10 @@ class LoginServiceTest {
         given_user(user(1L, "kuma@gmail.com"));
 
 
-        FacebookLoginClient facebookLoginClient = Mockito.mock(FacebookLoginClient.class);
         Mockito.when(facebookLoginClient.verify("facebook_token", "kuma@gmail.com"))
                 .thenReturn(FacebookLoginResult.SUCCESS);
 
-        when_login(1L, "facebook_token");
+        when_login(LoginType.FACEBOOK, 1L, "facebook_token");
 
         then_result_is(LoginResultCode.OK);
 
@@ -74,7 +73,7 @@ class LoginServiceTest {
 
         given_user(user(1L, "kuma@gmail.com"));
 
-        when_login(1L, "google_token");
+        when_login(LoginType.GOOGLE, 1L, "google_token");
 
         then_result_is(LoginResultCode.OK);
 
