@@ -24,7 +24,7 @@ public class LoginService {
 
         if (loginType.GOOGLE.equals(loginType)) {
 
-            return googleIdentityVerification.verifyGoogle(token, user);
+            return googleIdentityVerification.execute(token, user);
         }
 
         if (loginType.FACEBOOK.equals(loginType)) {
@@ -47,8 +47,5 @@ public class LoginService {
         }
     }
 
-    private LoginResultCode verifyGoogle(String token, User user) {
 
-        return googleIdentityVerification.verifyGoogle(token, user);
-    }
 }

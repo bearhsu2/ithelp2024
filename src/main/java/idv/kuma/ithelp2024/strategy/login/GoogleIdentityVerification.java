@@ -7,7 +7,7 @@ public class GoogleIdentityVerification {
         this.googleLoginClient = googleLoginClient;
     }
 
-    LoginResultCode verifyGoogle(String token, User user) {
+    LoginResultCode execute(String token, User user) {
         String email = googleLoginClient.check(token);
 
         if (email.equals(user.getEmail())) {
