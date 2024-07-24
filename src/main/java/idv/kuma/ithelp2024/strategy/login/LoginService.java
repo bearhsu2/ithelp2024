@@ -22,8 +22,9 @@ public class LoginService {
 
         if (email.equals(user.getEmail())) {
             return LoginResultCode.OK;
+        } else {
+            return LoginResultCode.FAIL;
         }
 
-        throw new RuntimeException("Not implemented yet");
     }
 }
