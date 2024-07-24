@@ -1,44 +1,51 @@
 package idv.kuma.ithelp2024.strategy.login;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class LoginService {
-
-    private final GoogleLoginClient googleLoginClient;
+    private static final Logger log = LoggerFactory.getLogger(LoginService.class);
     private final UserRepository userRepository;
+    private final GoogleLoginClient googleLoginClient;
+    private final FacebookLoginClient facebookLoginClient;
 
-    private FacebookLoginClient facebookLoginClient;
+    public LoginService(UserRepository userRepository, GoogleLoginClient googleLoginClient, FacebookLoginClient facebookLoginClient) {
 
-    public LoginService(GoogleLoginClient googleLoginClient, UserRepository userRepository, FacebookLoginClient facebookLoginClient) {
-        this.googleLoginClient = googleLoginClient;
         this.userRepository = userRepository;
+        this.googleLoginClient = googleLoginClient;
         this.facebookLoginClient = facebookLoginClient;
     }
+
 
     public LoginResultCode login(LoginType loginType, long userId, String token) {
 
         User user = userRepository.find(userId);
 
-        if (loginType.equals(LoginType.GOOGLE)) {
+
+        if (loginType.GOOGLE.equals(loginType)) {
 
             String email = googleLoginClient.check(token);
-            if (user.getEmail().equals(email)) {
+
+            if (email.equals(user.getEmail())) {
                 return LoginResultCode.OK;
             } else {
-                return LoginResultCode.FAILED;
+                return LoginResultCode.FAIL;
             }
         }
 
-        if (loginType.equals(LoginType.FACEBOOK)) {
+        if (loginType.FACEBOOK.equals(loginType)) {
 
-            FacebookLoginResult facebookLoginResult = facebookLoginClient.verify(token, user.getEmail());
-            if (facebookLoginResult.equals(FacebookLoginResult.SUCCESSFUL)) {
+            FacebookLoginResult result = facebookLoginClient.verify(token, user.getEmail());
+
+            if (FacebookLoginResult.SUCCESS.equals(result)) {
                 return LoginResultCode.OK;
             } else {
-                return LoginResultCode.FAILED;
+                return LoginResultCode.FAIL;
             }
-
         }
 
-        throw new RuntimeException("Unknown Login Type: " + loginType);
+        throw new RuntimeException("Unknown login type: " + loginType);
+
 
     }
 }

@@ -2,7 +2,7 @@ package idv.kuma.ithelp2024.strategy.login;
 
 public interface UserRepository {
 
-    User find(long id);
+    void save(User user);
 
-    void add(User user);
+    User find(long userId);
 }

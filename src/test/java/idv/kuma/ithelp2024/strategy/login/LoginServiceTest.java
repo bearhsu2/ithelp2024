@@ -6,93 +6,92 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 
-import static idv.kuma.ithelp2024.strategy.login.FacebookLoginResult.SUCCESSFUL;
-import static idv.kuma.ithelp2024.strategy.login.FacebookLoginResult.UNSUCCESSFUL;
-import static idv.kuma.ithelp2024.strategy.login.LoginType.FACEBOOK;
-import static idv.kuma.ithelp2024.strategy.login.LoginType.GOOGLE;
+import static org.mockito.ArgumentMatchers.anyString;
 
 class LoginServiceTest {
 
     private GoogleLoginClient googleLoginClient = Mockito.mock(GoogleLoginClient.class);
-    private FacebookLoginClient facebookLoginClient = Mockito.mock(FacebookLoginClient.class);
-    private UserRepository userRepository = new DummyUserRepository();
 
-    private LoginService loginService = new LoginService(googleLoginClient, userRepository, facebookLoginClient);
-    private LoginResultCode loginResultCode;
+    private DummyUserRepository userRepository = new DummyUserRepository();
+    private LoginResultCode actual;
+    private FacebookLoginClient facebookLoginClient = Mockito.mock(FacebookLoginClient.class);
+    private LoginService sut = new LoginService(
+            userRepository, googleLoginClient, facebookLoginClient
+    );
 
     @Test
-    void facebook_login_failed() {
+    void google_login_fail() {
 
-        given_user(1L, "kukumama@gmail.com");
+        given_google_token_belongs_to("tommy@gmail.com");
 
-        given_facebook_login_failed_for("facebook_login_token", "kukumama@gmail.com");
+        given_user(user(1L, "kuma@gmail.com"));
 
-        when_login(FACEBOOK, 1L, "facebook_login_token");
+        when_login(LoginType.GOOGLE, 1L, "google_token");
 
-        then_result().isEqualTo(LoginResultCode.FAILED);
+        Assertions.assertThat(actual).isEqualTo(LoginResultCode.FAIL);
 
     }
 
-    private void given_user(long userId, String email) {
-        userRepository.add(new User(userId, email));
+    private OngoingStubbing<String> given_google_token_belongs_to(String email) {
+        return Mockito.when(googleLoginClient.check(anyString())).thenReturn(email);
     }
 
-    private void given_facebook_login_failed_for(String token, String email) {
-        Mockito.when(facebookLoginClient.verify(token, email)).thenReturn(UNSUCCESSFUL);
+    private void given_user(User user) {
+        userRepository.save(user);
+    }
+
+    private User user(long id, String email) {
+        return new User(id, email);
     }
 
     private void when_login(LoginType loginType, long userId, String token) {
-        loginResultCode = loginService.login(loginType, userId, token);
+        actual = sut.login(loginType, userId, token);
     }
 
-    private AbstractComparableAssert<?, LoginResultCode> then_result() {
-        return Assertions.assertThat(loginResultCode);
+    @Test
+    void facebook_login_fail() {
+
+        given_user(user(1L, "kuma@gmail.com"));
+
+
+        Mockito.when(facebookLoginClient.verify("facebook_token", "kuma@gmail.com"))
+                .thenReturn(FacebookLoginResult.UNSUCCESSFUL);
+
+        when_login(LoginType.FACEBOOK, 1L, "facebook_token");
+
+        then_result_is(LoginResultCode.FAIL);
+
+    }
+
+    private AbstractComparableAssert<?, LoginResultCode> then_result_is(LoginResultCode result) {
+        return Assertions.assertThat(actual).isEqualTo(result);
     }
 
     @Test
     void facebook_login_ok() {
 
-        given_user(1L, "kukumama@gmail.com");
+        given_user(user(1L, "kuma@gmail.com"));
 
-        given_facebook_login_successful_for("facebook_login_token", "kukumama@gmail.com");
 
-        when_login(FACEBOOK, 1L, "facebook_login_token");
+        Mockito.when(facebookLoginClient.verify("facebook_token", "kuma@gmail.com"))
+                .thenReturn(FacebookLoginResult.SUCCESS);
 
-        then_result().isEqualTo(LoginResultCode.OK);
+        when_login(LoginType.FACEBOOK, 1L, "facebook_token");
 
-    }
+        then_result_is(LoginResultCode.OK);
 
-    private void given_facebook_login_successful_for(String token, String email) {
-        Mockito.when(facebookLoginClient.verify(token, email)).thenReturn(SUCCESSFUL);
     }
 
     @Test
     void google_login_ok() {
 
-        given_google_token_exists("google_login_token", "kukumama@gmail.com");
+        given_google_token_belongs_to("kuma@gmail.com");
 
-        given_user(1L, "kukumama@gmail.com");
+        given_user(user(1L, "kuma@gmail.com"));
 
-        when_login(GOOGLE, 1L, "google_login_token");
+        when_login(LoginType.GOOGLE, 1L, "google_token");
 
-        then_result().isEqualTo(LoginResultCode.OK);
-
-    }
-
-    private OngoingStubbing<String> given_google_token_exists(String token, String email) {
-        return Mockito.when(googleLoginClient.check(token)).thenReturn(email);
-    }
-
-    @Test
-    void google_login_failed() {
-
-        given_google_token_exists("google_login_token", "micky_mouse@gmail.com");
-
-        given_user(1L, "kukumama@gmail.com");
-
-        when_login(GOOGLE, 1L, "google_login_token");
-
-        then_result().isEqualTo(LoginResultCode.FAILED);
+        then_result_is(LoginResultCode.OK);
 
     }
 }
