@@ -10,8 +10,6 @@ public class LoginService {
         this.googleLoginClient = googleLoginClient;
     }
 
-    // Google login -> GoogleLoginClient (假的)
-    // Facebook login -> FacebookLoginClient (假的)
 
     public LoginResultCode login(long userId, String token) {
 
