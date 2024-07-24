@@ -24,28 +24,36 @@ public class LoginService {
 
         if (loginType.GOOGLE.equals(loginType)) {
 
-            String email = googleLoginClient.check(token);
-
-            if (email.equals(user.getEmail())) {
-                return LoginResultCode.OK;
-            } else {
-                return LoginResultCode.FAIL;
-            }
+            return verifyGoogle(token, user);
         }
 
         if (loginType.FACEBOOK.equals(loginType)) {
 
-            FacebookLoginResult result = facebookLoginClient.verify(token, user.getEmail());
-
-            if (FacebookLoginResult.SUCCESS.equals(result)) {
-                return LoginResultCode.OK;
-            } else {
-                return LoginResultCode.FAIL;
-            }
+            return verifyFacebook(token, user);
         }
 
         throw new RuntimeException("Unknown login type: " + loginType);
 
 
+    }
+
+    private LoginResultCode verifyFacebook(String token, User user) {
+        FacebookLoginResult result = facebookLoginClient.verify(token, user.getEmail());
+
+        if (FacebookLoginResult.SUCCESS.equals(result)) {
+            return LoginResultCode.OK;
+        } else {
+            return LoginResultCode.FAIL;
+        }
+    }
+
+    private LoginResultCode verifyGoogle(String token, User user) {
+        String email = googleLoginClient.check(token);
+
+        if (email.equals(user.getEmail())) {
+            return LoginResultCode.OK;
+        } else {
+            return LoginResultCode.FAIL;
+        }
     }
 }
