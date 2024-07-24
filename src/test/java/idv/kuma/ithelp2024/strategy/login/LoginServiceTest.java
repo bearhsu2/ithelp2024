@@ -48,6 +48,26 @@ class LoginServiceTest {
     }
 
     @Test
+    void facebook_login_ok() {
+
+        given_user(user(1L, "kuma@gmail.com"));
+
+
+        FacebookLoginClient facebookLoginClient = Mockito.mock(FacebookLoginClient.class);
+        Mockito.when(facebookLoginClient.verify("facebook_token", "kuma@gmail.com"))
+                .thenReturn(FacebookLoginResult.SUCCESS);
+
+        when_login(1L, "facebook_token");
+
+        then_result_is(LoginResultCode.OK);
+
+    }
+
+    private AbstractComparableAssert<?, LoginResultCode> then_result_is(LoginResultCode result) {
+        return Assertions.assertThat(actual).isEqualTo(result);
+    }
+
+    @Test
     void google_login_ok() {
 
         given_google_token_belongs_to("kuma@gmail.com");
@@ -58,9 +78,5 @@ class LoginServiceTest {
 
         then_result_is(LoginResultCode.OK);
 
-    }
-
-    private AbstractComparableAssert<?, LoginResultCode> then_result_is(LoginResultCode result) {
-        return Assertions.assertThat(actual).isEqualTo(result);
     }
 }
