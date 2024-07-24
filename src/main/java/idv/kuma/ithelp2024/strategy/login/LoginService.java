@@ -9,17 +9,12 @@ import java.util.Map;
 public class LoginService {
     private static final Logger log = LoggerFactory.getLogger(LoginService.class);
     private final UserRepository userRepository;
-//    private final GoogleIdentityVerification googleIdentityVerification;
-//    private final FacebookIdentityVerification facebookIdentityVerification;
 
-    private final Map<LoginType, IdentityVerification> identityVerifications = new HashMap<>();
+    private static final Map<LoginType, IdentityVerification> identityVerifications = new HashMap<>();
 
     public LoginService(UserRepository userRepository, GoogleIdentityVerification googleIdentityVerification, FacebookIdentityVerification facebookIdentityVerification) {
 
         this.userRepository = userRepository;
-
-//        this.googleIdentityVerification = googleIdentityVerification;
-//        this.facebookIdentityVerification = facebookIdentityVerification;
 
         this.identityVerifications.put(LoginType.GOOGLE, googleIdentityVerification);
         this.identityVerifications.put(LoginType.FACEBOOK, facebookIdentityVerification);
