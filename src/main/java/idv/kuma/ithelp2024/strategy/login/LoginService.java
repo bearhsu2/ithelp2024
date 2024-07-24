@@ -9,11 +9,11 @@ public class LoginService {
     private final GoogleIdentityVerification googleIdentityVerification;
     private final FacebookIdentityVerification facebookIdentityVerification;
 
-    public LoginService(UserRepository userRepository, GoogleLoginClient googleLoginClient, FacebookLoginClient facebookLoginClient) {
+    public LoginService(UserRepository userRepository, GoogleIdentityVerification googleIdentityVerification, FacebookIdentityVerification facebookIdentityVerification) {
 
         this.userRepository = userRepository;
-        googleIdentityVerification = new GoogleIdentityVerification(googleLoginClient);
-        facebookIdentityVerification = new FacebookIdentityVerification(facebookLoginClient);
+        this.googleIdentityVerification = googleIdentityVerification;
+        this.facebookIdentityVerification = facebookIdentityVerification;
     }
 
 

@@ -16,7 +16,7 @@ class LoginServiceTest {
     private LoginResultCode actual;
     private FacebookLoginClient facebookLoginClient = Mockito.mock(FacebookLoginClient.class);
     private LoginService sut = new LoginService(
-            userRepository, googleLoginClient, facebookLoginClient
+            userRepository, new GoogleIdentityVerification(googleLoginClient), new FacebookIdentityVerification(facebookLoginClient)
     );
 
     @Test
