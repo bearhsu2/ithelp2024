@@ -1,23 +1,16 @@
 package idv.kuma.ithelp2024.strategy.login;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
 import java.util.Map;
 
 public class LoginService {
-    private static final Logger log = LoggerFactory.getLogger(LoginService.class);
+
+    private final Map<LoginType, IdentityVerification> identityVerifications;
+
     private final UserRepository userRepository;
 
-    private static final Map<LoginType, IdentityVerification> identityVerifications = new HashMap<>();
-
-    public LoginService(UserRepository userRepository, GoogleIdentityVerification googleIdentityVerification, FacebookIdentityVerification facebookIdentityVerification) {
-
+    public LoginService(UserRepository userRepository, Map<LoginType, IdentityVerification> identityVerifications) {
         this.userRepository = userRepository;
-
-        this.identityVerifications.put(LoginType.GOOGLE, googleIdentityVerification);
-        this.identityVerifications.put(LoginType.FACEBOOK, facebookIdentityVerification);
+        this.identityVerifications = identityVerifications;
     }
 
 

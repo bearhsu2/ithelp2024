@@ -2,9 +2,12 @@ package idv.kuma.ithelp2024.strategy.login;
 
 import org.assertj.core.api.AbstractComparableAssert;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
+
+import java.util.HashMap;
 
 import static org.mockito.ArgumentMatchers.anyString;
 
@@ -15,8 +18,16 @@ class LoginServiceTest {
     private DummyUserRepository userRepository = new DummyUserRepository();
     private LoginResultCode actual;
     private FacebookLoginClient facebookLoginClient = Mockito.mock(FacebookLoginClient.class);
+    private HashMap<LoginType, IdentityVerification> identityVerifications = new HashMap<>();
+
+    @BeforeEach
+    void setUp() {
+        identityVerifications.put(LoginType.GOOGLE, new GoogleIdentityVerification(googleLoginClient));
+        identityVerifications.put(LoginType.FACEBOOK, new FacebookIdentityVerification(facebookLoginClient));
+    }
+
     private LoginService sut = new LoginService(
-            userRepository, new GoogleIdentityVerification(googleLoginClient), new FacebookIdentityVerification(facebookLoginClient)
+            userRepository, identityVerifications
     );
 
     @Test
