@@ -6,14 +6,14 @@ import org.slf4j.LoggerFactory;
 public class LoginService {
     private static final Logger log = LoggerFactory.getLogger(LoginService.class);
     private final UserRepository userRepository;
-    private final FacebookLoginClient facebookLoginClient;
     private final GoogleIdentityVerification googleIdentityVerification;
+    private final FacebookIdentityVerification facebookIdentityVerification;
 
     public LoginService(UserRepository userRepository, GoogleLoginClient googleLoginClient, FacebookLoginClient facebookLoginClient) {
 
         this.userRepository = userRepository;
         googleIdentityVerification = new GoogleIdentityVerification(googleLoginClient);
-        this.facebookLoginClient = facebookLoginClient;
+        facebookIdentityVerification = new FacebookIdentityVerification(facebookLoginClient);
     }
 
 
@@ -29,7 +29,7 @@ public class LoginService {
 
         if (loginType.FACEBOOK.equals(loginType)) {
 
-            return verifyFacebook(token, user);
+            return facebookIdentityVerification.execute(token, user);
         }
 
         throw new RuntimeException("Unknown login type: " + loginType);
@@ -38,13 +38,8 @@ public class LoginService {
     }
 
     private LoginResultCode verifyFacebook(String token, User user) {
-        FacebookLoginResult result = facebookLoginClient.verify(token, user.getEmail());
 
-        if (FacebookLoginResult.SUCCESS.equals(result)) {
-            return LoginResultCode.OK;
-        } else {
-            return LoginResultCode.FAIL;
-        }
+        return facebookIdentityVerification.execute(token, user);
     }
 
 
