@@ -40,7 +40,7 @@ public class LoginService {
             if (FacebookLoginResult.SUCCESS.equals(result)) {
                 return LoginResultCode.OK;
             } else {
-//                return LoginResultCode.FAIL;
+                return LoginResultCode.FAIL;
             }
         }
 

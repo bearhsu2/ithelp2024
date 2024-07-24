@@ -48,6 +48,25 @@ class LoginServiceTest {
     }
 
     @Test
+    void facebook_login_fail() {
+
+        given_user(user(1L, "kuma@gmail.com"));
+
+
+        Mockito.when(facebookLoginClient.verify("facebook_token", "kuma@gmail.com"))
+                .thenReturn(FacebookLoginResult.UNSUCCESS);
+
+        when_login(LoginType.FACEBOOK, 1L, "facebook_token");
+
+        then_result_is(LoginResultCode.FAIL);
+
+    }
+
+    private AbstractComparableAssert<?, LoginResultCode> then_result_is(LoginResultCode result) {
+        return Assertions.assertThat(actual).isEqualTo(result);
+    }
+
+    @Test
     void facebook_login_ok() {
 
         given_user(user(1L, "kuma@gmail.com"));
@@ -60,10 +79,6 @@ class LoginServiceTest {
 
         then_result_is(LoginResultCode.OK);
 
-    }
-
-    private AbstractComparableAssert<?, LoginResultCode> then_result_is(LoginResultCode result) {
-        return Assertions.assertThat(actual).isEqualTo(result);
     }
 
     @Test
