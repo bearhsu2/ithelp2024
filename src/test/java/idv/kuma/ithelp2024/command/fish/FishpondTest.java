@@ -22,9 +22,11 @@ class FishpondTest {
         sut.addFish(new Fish(4L));
         sut.addFish(new Fish(5L));
 
+        sut.fire(1, 1L, 75);
         sut.hit(1, 5L);
 
         Assertions.assertThat(sut.getFishes()).hasSize(4);
+        Assertions.assertThat(sut.getBullets()).isEmpty();
 
     }
 
@@ -39,9 +41,10 @@ class FishpondTest {
         sut.addPlayer(player1);
         sut.addPlayer(player2);
 
-        sut.fire(1, 75);
+        sut.fire(1, 1L, 75);
 
-        Assertions.assertThat(player1.getMessages().get(0)).isEqualTo("FIRE - position: 1, direction: 75");
-        Assertions.assertThat(player2.getMessages().get(0)).isEqualTo("FIRE - position: 1, direction: 75");
+        Assertions.assertThat(sut.getBullets().get(0))
+                .isEqualTo(new Bullet(1, 1L, 75));
+
     }
 }

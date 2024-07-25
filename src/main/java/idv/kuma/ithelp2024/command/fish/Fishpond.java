@@ -10,6 +10,9 @@ public class Fishpond {
     @Getter
     private List<Fish> fishes = new ArrayList<>();
 
+    @Getter
+    private List<Bullet> bullets = new ArrayList<>();
+
     public void addPlayer(Player player) {
         this.players.add(player);
     }
@@ -18,17 +21,13 @@ public class Fishpond {
         this.fishes.add(fish);
     }
 
-    public void fire(int position, int direction) {
-        for (Player player : players) {
-            player.sendMessage("FIRE - position: " + position + ", direction: " + direction);
-        }
+    public void fire(int position, long bulletId, int direction) {
+        this.bullets.add(new Bullet(position, bulletId, direction));
     }
 
-    public void hit(int position, long fishId) {
+    public void hit(long bulletId, long fishId) {
+        this.bullets.removeIf(bullet -> bullet.getBulletId() == bulletId);
         this.fishes.removeIf(fish -> fish.getFishId() == fishId);
-        for (Player player : players) {
-            player.sendMessage("HOT - position: " + position + ", fish: " + fishId);
-        }
     }
 
 }
