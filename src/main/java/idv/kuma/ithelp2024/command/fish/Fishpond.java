@@ -33,6 +33,7 @@ public class Fishpond {
         commands.offer(fireCommand);
 
         FireCommand polled = (FireCommand) commands.poll();
+
         this.bullets.add(new Bullet(polled.getPosition(), polled.getBulletId(), polled.getDirection()));
 
 
@@ -50,4 +51,7 @@ public class Fishpond {
 
     }
 
+    public void executeBatch() {
+
+    }
 }

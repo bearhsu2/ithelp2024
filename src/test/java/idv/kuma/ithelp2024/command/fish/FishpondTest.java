@@ -22,6 +22,8 @@ class FishpondTest {
         sut.fire(1, 1L, 75);
         sut.hit(1, 5L);
 
+        sut.executeBatch();
+
         Assertions.assertThat(sut.getFishes()).hasSize(4);
         Assertions.assertThat(sut.getBullets()).isEmpty();
 
@@ -36,6 +38,8 @@ class FishpondTest {
         sut.addPlayer(new Player(2L));
 
         sut.fire(1, 1L, 75);
+
+        sut.executeBatch();
 
         Assertions.assertThat(sut.getBullets().get(0))
                 .isEqualTo(new Bullet(1, 1L, 75));
