@@ -27,18 +27,10 @@ public class Fishpond {
         this.fishes.add(fish);
     }
 
-    public void fire(FireCommand fireCommand) {
-
-        commands.offer(fireCommand);
-
-
+    public void addCommand(Command command) {
+        commands.offer(command);
     }
 
-    public void hit(HitCommand hitCommand) {
-
-        this.commands.offer(hitCommand);
-
-    }
 
     public void executeBatch() {
 

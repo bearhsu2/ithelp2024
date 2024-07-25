@@ -19,8 +19,8 @@ class FishpondTest {
         sut.addFish(new Fish(4L));
         sut.addFish(new Fish(5L));
 
-        sut.fire(new FireCommand(1, 1L, 75));
-        sut.hit(new HitCommand(1, 5L));
+        sut.addCommand(new FireCommand(1, 1L, 75));
+        sut.addCommand(new HitCommand(1, 5L));
 
         sut.executeBatch();
 
@@ -37,7 +37,7 @@ class FishpondTest {
         sut.addPlayer(new Player(1L));
         sut.addPlayer(new Player(2L));
 
-        sut.fire(new FireCommand(1, 1L, 75));
+        sut.addCommand(new FireCommand(1, 1L, 75));
 
         sut.executeBatch();
 
