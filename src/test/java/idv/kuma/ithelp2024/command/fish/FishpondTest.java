@@ -10,11 +10,8 @@ class FishpondTest {
 
         Fishpond sut = new Fishpond();
 
-        Player player1 = new Player(1L);
-        Player player2 = new Player(2L);
-
-        sut.addPlayer(player1);
-        sut.addPlayer(player2);
+        sut.addPlayer(new Player(1L));
+        sut.addPlayer(new Player(2L));
 
         sut.addFish(new Fish(1L));
         sut.addFish(new Fish(2L));
@@ -35,11 +32,8 @@ class FishpondTest {
 
         Fishpond sut = new Fishpond();
 
-        Player player1 = new Player(1L);
-        Player player2 = new Player(2L);
-
-        sut.addPlayer(player1);
-        sut.addPlayer(player2);
+        sut.addPlayer(new Player(1L));
+        sut.addPlayer(new Player(2L));
 
         sut.fire(1, 1L, 75);
 
