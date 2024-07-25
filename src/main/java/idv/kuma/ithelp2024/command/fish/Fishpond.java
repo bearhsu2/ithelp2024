@@ -32,10 +32,6 @@ public class Fishpond {
         FireCommand fireCommand = new FireCommand(position, bulletId, direction);
         commands.offer(fireCommand);
 
-        FireCommand polled = (FireCommand) commands.poll();
-
-        this.bullets.add(new Bullet(polled.getPosition(), polled.getBulletId(), polled.getDirection()));
-
 
     }
 
@@ -44,14 +40,22 @@ public class Fishpond {
         HitCommand hitCommand = new HitCommand(bulletId, fishId);
         this.commands.offer(hitCommand);
 
-        HitCommand polled = (HitCommand) commands.poll();
-
-        this.bullets.removeIf(bullet -> bullet.getBulletId() == polled.getBulletId());
-        this.fishes.removeIf(fish -> fish.getFishId() == polled.getFishId());
-
     }
 
     public void executeBatch() {
+
+        while (!commands.isEmpty()) {
+            Command polled = commands.poll();
+
+            if (polled instanceof FireCommand) {
+                FireCommand fireCommand = (FireCommand) polled;
+                this.bullets.add(new Bullet(fireCommand.getPosition(), fireCommand.getBulletId(), fireCommand.getDirection()));
+            } else if (polled instanceof HitCommand) {
+                HitCommand hitCommand = (HitCommand) polled;
+                this.bullets.removeIf(bullet -> bullet.getBulletId() == hitCommand.getBulletId());
+                this.fishes.removeIf(fish -> fish.getFishId() == hitCommand.getFishId());
+            }
+        }
 
     }
 }
