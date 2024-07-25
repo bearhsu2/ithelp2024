@@ -27,17 +27,15 @@ public class Fishpond {
         this.fishes.add(fish);
     }
 
-    public void fire(int position, long bulletId, int direction) {
+    public void fire(FireCommand fireCommand) {
 
-        FireCommand fireCommand = new FireCommand(position, bulletId, direction);
         commands.offer(fireCommand);
 
 
     }
 
-    public void hit(long bulletId, long fishId) {
+    public void hit(HitCommand hitCommand) {
 
-        HitCommand hitCommand = new HitCommand(bulletId, fishId);
         this.commands.offer(hitCommand);
 
     }
