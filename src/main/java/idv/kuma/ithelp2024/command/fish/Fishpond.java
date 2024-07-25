@@ -40,8 +40,13 @@ public class Fishpond {
 
     public void hit(long bulletId, long fishId) {
 
-        this.bullets.removeIf(bullet -> bullet.getBulletId() == bulletId);
-        this.fishes.removeIf(fish -> fish.getFishId() == fishId);
+        HitCommand hitCommand = new HitCommand(bulletId, fishId);
+        this.commands.offer(hitCommand);
+
+        HitCommand polled = (HitCommand) commands.poll();
+
+        this.bullets.removeIf(bullet -> bullet.getBulletId() == polled.getBulletId());
+        this.fishes.removeIf(fish -> fish.getFishId() == polled.getFishId());
 
     }
 
