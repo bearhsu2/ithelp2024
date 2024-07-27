@@ -8,15 +8,11 @@ import java.util.List;
 import java.util.Queue;
 
 public class Fishpond {
-
     private List<Player> players = new ArrayList<>();
-
     @Getter
     private List<Fish> fishes = new ArrayList<>();
-
     @Getter
     private List<Bullet> bullets = new ArrayList<>();
-
     private Queue<Command> commands = new LinkedList<>();
 
     public void addPlayer(Player player) {
@@ -30,7 +26,6 @@ public class Fishpond {
     public void addCommand(Command command) {
         commands.offer(command);
     }
-
 
     public void executeBatch() {
 
