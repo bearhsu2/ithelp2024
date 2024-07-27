@@ -33,9 +33,9 @@ public class Fishpond {
             Command polled = commands.poll();
 
             if (polled instanceof FireCommand) {
-                ((FireCommand) polled).executeFire(this);
+                ((FireCommand) polled).execute(this);
             } else if (polled instanceof HitCommand) {
-                ((HitCommand) polled).executeHit(this);
+                ((HitCommand) polled).execute(this);
             }
         }
 

@@ -13,7 +13,8 @@ public class HitCommand implements Command {
         this.fishId = fishId;
     }
 
-    void executeHit(Fishpond fishpond) {
+    @Override
+    public void execute(Fishpond fishpond) {
         fishpond.getBullets().removeIf(bullet -> bullet.getBulletId() == this.getBulletId());
         fishpond.getFishes().removeIf(fish -> fish.getFishId() == this.getFishId());
     }
