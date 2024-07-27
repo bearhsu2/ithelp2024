@@ -16,6 +16,11 @@ public class FireCommand implements Command {
 
     @Override
     public void execute(Fishpond fishpond) {
-        fishpond.getBullets().add(new Bullet(this.getPosition(), this.getBulletId(), this.getDirection()));
+        fishpond.getBullets().add(
+                new Bullet(this.getPosition(),
+                        this.getBulletId(),
+                        this.getDirection()
+                ));
     }
+
 }

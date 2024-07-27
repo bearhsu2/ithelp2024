@@ -28,13 +28,9 @@ public class Fishpond {
     }
 
     public void executeBatch() {
-
         while (!commands.isEmpty()) {
-
             commands.poll().execute(this);
-
         }
-
     }
 
 }

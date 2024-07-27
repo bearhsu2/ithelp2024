@@ -15,7 +15,9 @@ public class HitCommand implements Command {
 
     @Override
     public void execute(Fishpond fishpond) {
-        fishpond.getBullets().removeIf(bullet -> bullet.getBulletId() == this.getBulletId());
-        fishpond.getFishes().removeIf(fish -> fish.getFishId() == this.getFishId());
+        fishpond.getBullets().removeIf(
+                bullet -> bullet.getBulletId() == this.getBulletId());
+        fishpond.getFishes().removeIf(
+                fish -> fish.getFishId() == this.getFishId());
     }
 }
