@@ -3,7 +3,7 @@ package idv.kuma.ithelp2024.command.fish;
 import lombok.Getter;
 
 @Getter
-public class HitCommand implements Command{
+public class HitCommand implements Command {
     private final long bulletId;
     private final long fishId;
 
@@ -11,5 +11,11 @@ public class HitCommand implements Command{
 
         this.bulletId = bulletId;
         this.fishId = fishId;
+    }
+
+    void executeHit(Fishpond fishpond) {
+        HitCommand hitCommand = this;
+        fishpond.getBullets().removeIf(bullet -> bullet.getBulletId() == hitCommand.getBulletId());
+        fishpond.getFishes().removeIf(fish -> fish.getFishId() == hitCommand.getFishId());
     }
 }

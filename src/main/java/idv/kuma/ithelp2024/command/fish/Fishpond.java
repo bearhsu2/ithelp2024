@@ -35,15 +35,10 @@ public class Fishpond {
             if (polled instanceof FireCommand) {
                 ((FireCommand) polled).executeFire(this);
             } else if (polled instanceof HitCommand) {
-                executeHit((HitCommand) polled);
+                ((HitCommand) polled).executeHit(this);
             }
         }
 
     }
 
-    private void executeHit(HitCommand polled) {
-        HitCommand hitCommand = polled;
-        this.bullets.removeIf(bullet -> bullet.getBulletId() == hitCommand.getBulletId());
-        this.fishes.removeIf(fish -> fish.getFishId() == hitCommand.getFishId());
-    }
 }
