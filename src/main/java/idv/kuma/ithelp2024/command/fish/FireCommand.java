@@ -13,4 +13,9 @@ public class FireCommand implements Command {
         this.bulletId = bulletId;
         this.direction = direction;
     }
+
+    void executeFire(Fishpond fishpond) {
+        FireCommand fireCommand = this;
+        fishpond.getBullets().add(new Bullet(fireCommand.getPosition(), fireCommand.getBulletId(), fireCommand.getDirection()));
+    }
 }

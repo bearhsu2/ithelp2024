@@ -33,14 +33,17 @@ public class Fishpond {
             Command polled = commands.poll();
 
             if (polled instanceof FireCommand) {
-                FireCommand fireCommand = (FireCommand) polled;
-                this.bullets.add(new Bullet(fireCommand.getPosition(), fireCommand.getBulletId(), fireCommand.getDirection()));
+                ((FireCommand) polled).executeFire(this);
             } else if (polled instanceof HitCommand) {
-                HitCommand hitCommand = (HitCommand) polled;
-                this.bullets.removeIf(bullet -> bullet.getBulletId() == hitCommand.getBulletId());
-                this.fishes.removeIf(fish -> fish.getFishId() == hitCommand.getFishId());
+                executeHit((HitCommand) polled);
             }
         }
 
+    }
+
+    private void executeHit(HitCommand polled) {
+        HitCommand hitCommand = polled;
+        this.bullets.removeIf(bullet -> bullet.getBulletId() == hitCommand.getBulletId());
+        this.fishes.removeIf(fish -> fish.getFishId() == hitCommand.getFishId());
     }
 }
