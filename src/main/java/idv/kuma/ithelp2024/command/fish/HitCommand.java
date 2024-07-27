@@ -14,8 +14,7 @@ public class HitCommand implements Command {
     }
 
     void executeHit(Fishpond fishpond) {
-        HitCommand hitCommand = this;
-        fishpond.getBullets().removeIf(bullet -> bullet.getBulletId() == hitCommand.getBulletId());
-        fishpond.getFishes().removeIf(fish -> fish.getFishId() == hitCommand.getFishId());
+        fishpond.getBullets().removeIf(bullet -> bullet.getBulletId() == this.getBulletId());
+        fishpond.getFishes().removeIf(fish -> fish.getFishId() == this.getFishId());
     }
 }
