@@ -30,9 +30,8 @@ public class Fishpond {
     public void executeBatch() {
 
         while (!commands.isEmpty()) {
-            Command polled = commands.poll();
 
-            polled.execute(this);
+            commands.poll().execute(this);
 
         }
 
