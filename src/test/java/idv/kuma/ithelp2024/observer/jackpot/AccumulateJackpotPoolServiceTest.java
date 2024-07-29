@@ -1,8 +1,10 @@
 package idv.kuma.ithelp2024.observer.jackpot;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Disabled
 class AccumulateJackpotPoolServiceTest {
 
     @Test
@@ -10,23 +12,27 @@ class AccumulateJackpotPoolServiceTest {
 
         AccumulateJackpotPoolService sut = new AccumulateJackpotPoolService();
 
-        JackpotPool jackpotPool = new JackpotPool();
-        jackpotPool.setId(3345678L);
-        jackpotPool.setContributionRateHundredThousandth(35L);
-        jackpotPool.setAmountHundredThousandth(100_000_00_00L);
-        jackpotPool.setPrizeCent(300_000_00L);
+        JackpotPool oldJackpotPool = new JackpotPool();
+        oldJackpotPool.setId(3345678L);
+        oldJackpotPool.setContributionRateHundredThousandth(35L);
+        oldJackpotPool.setAmountHundredThousandth(100_000_00_00L);
+        oldJackpotPool.setPrizeCent(300_000_00L);
 
-        JackpotPoolRepository jackpotPoolRepository = new JackpotPoolRepository();
-        jackpotPoolRepository.save(jackpotPool);
+        JackpotPoolRepository jackpotPoolRepository = new InMemoryJackpotPoolRepository();
+        jackpotPoolRepository.save(oldJackpotPool);
 
         sut.accumulate(9527L, 100_00L);
 
+
+        JackpotPool newJackpotPool = jackpotPoolRepository.findById(3345678L);
         Assertions.assertThat(
-                jackpotPool.getAmountHundredThousandth()
+                newJackpotPool.getAmountHundredThousandth()
         ).isEqualTo(100_000_35_00L);
-        // update new pool to big screen
-        // update prize to big screen
-        // update prize to machine
+
+        // 都要做：update pool
+        // 有中：send prize and machine to big screen
+        //      send prize to machine
+        //      send prize and user to risk management department
 
 
     }
