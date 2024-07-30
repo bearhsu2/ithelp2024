@@ -26,7 +26,7 @@ public class AccumulateJackpotPoolService {
 
         jackpotPool.accumulate(betAmountCent);
 
-        if (jackpotPool.getAmountTenThousandth() >= jackpotPool.getPrizeCent() * 100) {
+        if (jackpotPool.isJackpotHit()) {
             JackpotPoolSetting next = jackpotPoolSettingCreator.getNext();
             jackpotPool.initialize(next);
         }

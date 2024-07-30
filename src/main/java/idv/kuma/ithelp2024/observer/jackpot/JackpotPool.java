@@ -28,4 +28,8 @@ public class JackpotPool {
 
         setAmountTenThousandth(this.amountTenThousandth + contributionTenThousandth);
     }
+
+    boolean isJackpotHit() {
+        return getAmountTenThousandth() >= getPrizeCent() * 100;
+    }
 }
