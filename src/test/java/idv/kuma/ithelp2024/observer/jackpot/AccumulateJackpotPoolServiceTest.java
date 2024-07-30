@@ -10,23 +10,26 @@ class AccumulateJackpotPoolServiceTest {
     @Test
     void no_jackpot() {
 
-        AccumulateJackpotPoolService sut = new AccumulateJackpotPoolService();
 
         JackpotPool oldJackpotPool = new JackpotPool();
         oldJackpotPool.setId(30678L);
-        oldJackpotPool.setContributionRateHundredThousandth(35L);
-        oldJackpotPool.setAmountHundredThousandth(100_000_00_00L);
+        oldJackpotPool.setContributionRateTenThousandth(35L);
+        oldJackpotPool.setAmountTenThousandth(100_000_00_00L);
         oldJackpotPool.setPrizeCent(300_000_00L);
 
         JackpotPoolRepository jackpotPoolRepository = new InMemoryJackpotPoolRepository();
         jackpotPoolRepository.save(oldJackpotPool);
 
+        MachineRepository machineRepository = new InMemoryMachineRepository();
+        machineRepository.save(new Machine(207, 30678L));
+
+        AccumulateJackpotPoolService sut = new AccumulateJackpotPoolService(machineRepository, jackpotPoolRepository);
         sut.accumulate(9527L, 207L, 100_00L);
 
 
-        JackpotPool newJackpotPool = jackpotPoolRepository.findById(3345678L);
+        JackpotPool newJackpotPool = jackpotPoolRepository.findById(30678L);
         Assertions.assertThat(
-                newJackpotPool.getAmountHundredThousandth()
+                newJackpotPool.getAmountTenThousandth()
         ).isEqualTo(100_000_35_00L);
 
         // 都要做：update pool
