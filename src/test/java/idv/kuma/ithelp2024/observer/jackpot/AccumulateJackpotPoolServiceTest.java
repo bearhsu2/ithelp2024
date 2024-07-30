@@ -21,11 +21,12 @@ class AccumulateJackpotPoolServiceTest {
 
         jackpotPoolRepository.save(oldJackpotPool);
 
-        machineRepository.save(new Machine(207, 30678L));
+        machineRepository.save(machine(207, 30678L));
 
         sut.accumulate(9527L, 207L, 100_00L);
 
         JackpotPool newJackpotPool = jackpotPoolRepository.findById(30678L);
+
         Assertions.assertThat(
                 newJackpotPool.getAmountTenThousandth()
         ).isEqualTo(100_000_35_00L);
@@ -36,6 +37,10 @@ class AccumulateJackpotPoolServiceTest {
         //      (will do) send prize and user to risk management department
 
 
+    }
+
+    private Machine machine(int machineId, long jackpotPoolId) {
+        return new Machine(machineId, jackpotPoolId);
     }
 
 }
