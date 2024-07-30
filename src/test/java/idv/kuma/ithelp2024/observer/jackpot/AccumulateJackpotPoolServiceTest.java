@@ -7,6 +7,10 @@ import org.junit.jupiter.api.Test;
 @Disabled
 class AccumulateJackpotPoolServiceTest {
 
+    private JackpotPoolRepository jackpotPoolRepository = new InMemoryJackpotPoolRepository();
+    private MachineRepository machineRepository = new InMemoryMachineRepository();
+    private AccumulateJackpotPoolService sut = new AccumulateJackpotPoolService(machineRepository, jackpotPoolRepository);
+
     @Test
     void no_jackpot() {
 
@@ -15,15 +19,11 @@ class AccumulateJackpotPoolServiceTest {
 
         oldJackpotPool.initialize(new JackpotPoolSetting(300_000_00L, 100_000_00_00L));
 
-        JackpotPoolRepository jackpotPoolRepository = new InMemoryJackpotPoolRepository();
         jackpotPoolRepository.save(oldJackpotPool);
 
-        MachineRepository machineRepository = new InMemoryMachineRepository();
         machineRepository.save(new Machine(207, 30678L));
 
-        AccumulateJackpotPoolService sut = new AccumulateJackpotPoolService(machineRepository, jackpotPoolRepository);
         sut.accumulate(9527L, 207L, 100_00L);
-
 
         JackpotPool newJackpotPool = jackpotPoolRepository.findById(30678L);
         Assertions.assertThat(
