@@ -10,4 +10,15 @@ public class JackpotPool {
     private long prizeCent;
 
 
+    public static JackpotPool create(long id, long contributionRateTenThousandth) {
+        JackpotPool oldJackpotPool = new JackpotPool();
+        oldJackpotPool.setId(id);
+        oldJackpotPool.setContributionRateTenThousandth(contributionRateTenThousandth);
+        return oldJackpotPool;
+    }
+
+    public void initialize(long prizeCent, long amountTenThousandth) {
+        setAmountTenThousandth(amountTenThousandth);
+        setPrizeCent(prizeCent);
+    }
 }
