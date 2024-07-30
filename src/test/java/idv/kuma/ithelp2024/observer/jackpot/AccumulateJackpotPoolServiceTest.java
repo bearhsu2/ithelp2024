@@ -31,13 +31,8 @@ class AccumulateJackpotPoolServiceTest {
                 newJackpotPool.getAmountTenThousandth()
         ).isEqualTo(100_000_35_00L);
 
-        // 都要做：update pool
-        // 有中：send prize and playerId to big screen
-        //      send prize to machine
-        //      (will do) send prize and user to risk management department
-
-
     }
+
 
     private Machine machine(int machineId, long jackpotPoolId) {
         return new Machine(machineId, jackpotPoolId);
