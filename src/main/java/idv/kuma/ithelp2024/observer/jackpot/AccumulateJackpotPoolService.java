@@ -10,10 +10,12 @@ public class AccumulateJackpotPoolService {
 
     private final MachineRepository machineRepository;
     private final JackpotPoolRepository jackpotPoolRepository;
+    private final JackpotPoolSettingCreator jackpotPoolSettingCreator;
 
-    public AccumulateJackpotPoolService(MachineRepository machineRepository, JackpotPoolRepository jackpotPoolRepository) {
+    public AccumulateJackpotPoolService(MachineRepository machineRepository, JackpotPoolRepository jackpotPoolRepository, JackpotPoolSettingCreator jackpotPoolSettingCreator) {
         this.machineRepository = machineRepository;
         this.jackpotPoolRepository = jackpotPoolRepository;
+        this.jackpotPoolSettingCreator = jackpotPoolSettingCreator;
     }
 
     public void accumulate(long userId, long machineId, long betAmountCent) {
@@ -23,6 +25,11 @@ public class AccumulateJackpotPoolService {
         JackpotPool jackpotPool = jackpotPoolRepository.findById(machine.getJackpotPoolId());
 
         jackpotPool.accumulate(betAmountCent);
+
+        if (jackpotPool.getAmountTenThousandth() >= jackpotPool.getPrizeCent() * 100) {
+            JackpotPoolSetting next = jackpotPoolSettingCreator.getNext();
+            jackpotPool.initialize(next);
+        }
 
         jackpotPoolRepository.save(jackpotPool);
 
