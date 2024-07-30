@@ -17,8 +17,8 @@ public class JackpotPool {
         return oldJackpotPool;
     }
 
-    public void initialize(long prizeCent, long amountTenThousandth) {
-        setAmountTenThousandth(amountTenThousandth);
-        setPrizeCent(prizeCent);
+    public void initialize(JackpotPoolSetting jackpotPoolSetting) {
+        setAmountTenThousandth(jackpotPoolSetting.amountTenThousandth());
+        setPrizeCent(jackpotPoolSetting.prizeCent());
     }
 }

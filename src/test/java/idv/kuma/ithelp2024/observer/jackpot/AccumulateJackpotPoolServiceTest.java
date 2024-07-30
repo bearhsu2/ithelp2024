@@ -13,7 +13,7 @@ class AccumulateJackpotPoolServiceTest {
 
         JackpotPool oldJackpotPool = JackpotPool.create(30678L, 35L);
 
-        oldJackpotPool.initialize(300_000_00L, 100_000_00_00L);
+        oldJackpotPool.initialize(new JackpotPoolSetting(300_000_00L, 100_000_00_00L));
 
         JackpotPoolRepository jackpotPoolRepository = new InMemoryJackpotPoolRepository();
         jackpotPoolRepository.save(oldJackpotPool);
