@@ -21,4 +21,11 @@ public class JackpotPool {
         setAmountTenThousandth(jackpotPoolSetting.amountTenThousandth());
         setPrizeCent(jackpotPoolSetting.prizeCent());
     }
+
+    void accumulate(long betAmountCent) {
+
+        long contributionTenThousandth = betAmountCent * 100 * this.contributionRateTenThousandth / 10000;
+
+        setAmountTenThousandth(this.amountTenThousandth + contributionTenThousandth);
+    }
 }

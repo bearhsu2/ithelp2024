@@ -16,13 +16,10 @@ public class AccumulateJackpotPoolService {
 
         JackpotPool jackpotPool = jackpotPoolRepository.findById(machine.getJackpotPoolId());
 
-        long amount = jackpotPool.getAmountTenThousandth();
-
-        long contributionTenThousandth = betAmountCent * 100 * jackpotPool.getContributionRateTenThousandth() / 10000;
-
-        jackpotPool.setAmountTenThousandth(amount + contributionTenThousandth);
+        jackpotPool.accumulate(betAmountCent);
 
         jackpotPoolRepository.save(jackpotPool);
 
     }
+
 }
