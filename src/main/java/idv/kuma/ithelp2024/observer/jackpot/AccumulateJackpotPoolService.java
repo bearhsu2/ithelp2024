@@ -2,11 +2,6 @@ package idv.kuma.ithelp2024.observer.jackpot;
 
 public class AccumulateJackpotPoolService {
 
-    // 都要做：update pool
-    // 有中：send prize and playerId to big screen
-    //      send prize to machine
-    //      (will do) send prize and user to risk management department
-
 
     private final MachineRepository machineRepository;
     private final JackpotPoolRepository jackpotPoolRepository;
@@ -29,8 +24,14 @@ public class AccumulateJackpotPoolService {
         if (jackpotPool.isJackpotHit()) {
             JackpotPoolSetting next = jackpotPoolSettingCreator.getNext();
             jackpotPool.initialize(next);
+
+            // send prize and playerId to big screen
+            // send prize to machine
+            // (will do) send prize and user to risk management department
+
         }
 
+        // update pool
         jackpotPoolRepository.save(jackpotPool);
 
     }
