@@ -2,6 +2,7 @@ package idv.kuma.ithelp2024.observer.jackpot;
 
 import lombok.Data;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 @Data
@@ -19,7 +20,7 @@ public class JackpotPool {
         return oldJackpotPool;
     }
 
-    void accumulate(long betAmountCent, Supplier<JackpotPoolSetting> settingSupplier) {
+    Optional<JackpotHit> accumulate(long betAmountCent, Supplier<JackpotPoolSetting> settingSupplier) {
         long contributionTenThousandth = betAmountCent * 100 * contributionRateTenThousandth / 10000;
 
         setAmountTenThousandth(amountTenThousandth + contributionTenThousandth);
@@ -28,13 +29,16 @@ public class JackpotPool {
 
             JackpotPoolSetting next = settingSupplier.get();
 
-            initialize(next);
+            JackpotHit jackpotHit = new JackpotHit(prizeCent);
 
-            // send prize and playerId to big screen
-            // send prize to machine
-            // (will do) send prize and user to risk management department
+            initialize(next);
+            
+            return Optional.of(jackpotHit);
+
 
         }
+
+        return Optional.empty();
     }
 
     private boolean isJackpotHit() {

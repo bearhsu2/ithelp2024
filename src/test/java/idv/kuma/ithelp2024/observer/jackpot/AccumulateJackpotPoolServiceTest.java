@@ -7,10 +7,17 @@ import org.junit.jupiter.api.Test;
 @Disabled
 class AccumulateJackpotPoolServiceTest {
 
-    private JackpotPoolRepository jackpotPoolRepository = new InMemoryJackpotPoolRepository();
-    private MachineRepository machineRepository = new InMemoryMachineRepository();
-    private FakeJackpotPoolSettingCreator jackpotPoolSettingCreator = new FakeJackpotPoolSettingCreator();
-    private AccumulateJackpotPoolService sut = new AccumulateJackpotPoolService(machineRepository, jackpotPoolRepository, jackpotPoolSettingCreator);
+    private final JackpotPoolRepository jackpotPoolRepository = new InMemoryJackpotPoolRepository();
+    private final MachineRepository machineRepository = new InMemoryMachineRepository();
+    private final FakeJackpotPoolSettingCreator jackpotPoolSettingCreator = new FakeJackpotPoolSettingCreator();
+    private final FakeBigScreenController bigScreenController = new FakeBigScreenController();
+
+    private final AccumulateJackpotPoolService sut = new AccumulateJackpotPoolService(
+            machineRepository,
+            jackpotPoolRepository,
+            jackpotPoolSettingCreator,
+            bigScreenController
+    );
 
     @Test
     void jackpot() {
@@ -35,6 +42,9 @@ class AccumulateJackpotPoolServiceTest {
         Assertions.assertThat(
                 newJackpotPool.getAmountTenThousandth()
         ).isEqualTo(150_000_00_00L);
+        Assertions.assertThat(
+                bigScreenController.showRecords.get(0)
+        ).isEqualTo(new ShowRecord(300_000_00L, 9527L));
 
     }
 
