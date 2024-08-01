@@ -19,17 +19,7 @@ public class AccumulateJackpotPoolService {
 
         JackpotPool jackpotPool = jackpotPoolRepository.findById(machine.getJackpotPoolId());
 
-        jackpotPool.accumulate(betAmountCent);
-
-        if (jackpotPool.isJackpotHit()) {
-            JackpotPoolSetting next = jackpotPoolSettingCreator.getNext();
-            jackpotPool.initialize(next);
-
-            // send prize and playerId to big screen
-            // send prize to machine
-            // (will do) send prize and user to risk management department
-
-        }
+        jackpotPool.accumulate(betAmountCent, jackpotPoolSettingCreator::getNext);
 
         // update pool
         jackpotPoolRepository.save(jackpotPool);
