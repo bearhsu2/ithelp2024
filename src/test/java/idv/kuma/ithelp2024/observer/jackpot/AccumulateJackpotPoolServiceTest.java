@@ -28,7 +28,9 @@ class AccumulateJackpotPoolServiceTest {
 
         jackpotPoolRepository.save(oldJackpotPool);
 
-        machineRepository.save(machine(207, 30678L));
+        Machine machine = machine(207, 30678L);
+
+        machineRepository.save(machine);
 
 
         jackpotPoolSettingCreator.setNext(
@@ -46,6 +48,10 @@ class AccumulateJackpotPoolServiceTest {
         Assertions.assertThat(
                 bigScreenController.screenRecords.get(0)
         ).isEqualTo(new ScreenRecord(300_000_00L, 9527L));
+
+        Assertions.assertThat(
+                machine.getDistributeRecord().get(0)
+        ).isEqualTo(new DistributeRecord(30678L, 300_000_00L));
 
     }
 
@@ -67,7 +73,9 @@ class AccumulateJackpotPoolServiceTest {
 
         jackpotPoolRepository.save(oldJackpotPool);
 
-        machineRepository.save(machine(207, 30678L));
+        Machine machine = machine(207, 30678L);
+
+        machineRepository.save(machine);
 
         sut.accumulate(9527L, 207L, 100_00L);
 
@@ -80,6 +88,12 @@ class AccumulateJackpotPoolServiceTest {
         Assertions.assertThat(
                 bigScreenController.screenRecords
         ).isEmpty();
+
+
+        Assertions.assertThat(
+                machine.getDistributeRecord()
+        ).isEmpty();
+
 
     }
 
