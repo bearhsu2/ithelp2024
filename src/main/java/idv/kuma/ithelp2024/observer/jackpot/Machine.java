@@ -16,7 +16,7 @@ public class Machine {
         this.jackpotPoolId = jackpotPoolId;
     }
 
-    public void distributeJackpot(long jackpotPoolId, long prizeCent) {
-        this.distributeRecord.add(new DistributeRecord(jackpotPoolId, prizeCent));
+    public void distributeJackpot(long prizeCent) {
+        this.distributeRecord.add(new DistributeRecord(prizeCent));
     }
 }

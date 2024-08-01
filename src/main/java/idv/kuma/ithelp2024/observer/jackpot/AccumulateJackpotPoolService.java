@@ -34,7 +34,7 @@ public class AccumulateJackpotPoolService {
                     bigScreenNotifier.showJackpotHit(jackpotHit.getPrizeCent(), userId);
 
                     // send prize to machine
-                    machine.distributeJackpot(jackpotPool.getId(), jackpotHit.getPrizeCent());
+                    machine.distributeJackpot(jackpotHit.getPrizeCent());
                     machineRepository.save(machine);
 
                     // (will do) send prize and user to risk management department

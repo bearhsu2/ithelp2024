@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class DistributeRecord {
-    private final long jackpotPoolId;
     private final long prizeCent;
 
 }

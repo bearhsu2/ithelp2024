@@ -51,7 +51,7 @@ class AccumulateJackpotPoolServiceTest {
 
         Assertions.assertThat(
                 machine.getDistributeRecord().get(0)
-        ).isEqualTo(new DistributeRecord(30678L, 300_000_00L));
+        ).isEqualTo(new DistributeRecord(300_000_00L));
 
     }
 
