@@ -42,9 +42,10 @@ class AccumulateJackpotPoolServiceTest {
         Assertions.assertThat(
                 newJackpotPool.getAmountTenThousandth()
         ).isEqualTo(150_000_00_00L);
+
         Assertions.assertThat(
-                bigScreenController.showRecords.get(0)
-        ).isEqualTo(new ShowRecord(300_000_00L, 9527L));
+                bigScreenController.screenRecords.get(0)
+        ).isEqualTo(new ScreenRecord(300_000_00L, 9527L));
 
     }
 

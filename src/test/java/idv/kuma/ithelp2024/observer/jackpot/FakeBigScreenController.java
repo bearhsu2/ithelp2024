@@ -5,10 +5,10 @@ import java.util.List;
 
 public class FakeBigScreenController implements BigScreenController {
 
-    List<ShowRecord>  showRecords = new ArrayList<>();
+    List<ScreenRecord> screenRecords = new ArrayList<>();
 
     @Override
     public void showJackpotHit(long prizeCent, long userId) {
-        this.showRecords.add(new ShowRecord(prizeCent, userId));
+        this.screenRecords.add(new ScreenRecord(prizeCent, userId));
     }
 }
