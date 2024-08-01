@@ -4,13 +4,15 @@ import java.util.Optional;
 
 public class AccumulateJackpotPoolService {
 
-
     private final MachineRepository machineRepository;
     private final JackpotPoolRepository jackpotPoolRepository;
     private final JackpotPoolSettingCreator jackpotPoolSettingCreator;
     private BigScreenController bigScreenNotifier;
 
-    public AccumulateJackpotPoolService(MachineRepository machineRepository, JackpotPoolRepository jackpotPoolRepository, JackpotPoolSettingCreator jackpotPoolSettingCreator, BigScreenController bigScreenNotifier) {
+    public AccumulateJackpotPoolService(MachineRepository machineRepository,
+                                        JackpotPoolRepository jackpotPoolRepository,
+                                        JackpotPoolSettingCreator jackpotPoolSettingCreator,
+                                        BigScreenController bigScreenNotifier) {
         this.machineRepository = machineRepository;
         this.jackpotPoolRepository = jackpotPoolRepository;
         this.jackpotPoolSettingCreator = jackpotPoolSettingCreator;
@@ -25,7 +27,6 @@ public class AccumulateJackpotPoolService {
 
         Optional<JackpotHit> jackpotHitOpt = jackpotPool.accumulate(betAmountCent, jackpotPoolSettingCreator::getNext);
 
-        // update pool
         jackpotPoolRepository.save(jackpotPool);
 
         jackpotHitOpt.ifPresent(jackpotHit -> {
@@ -36,13 +37,8 @@ public class AccumulateJackpotPoolService {
                     machine.distributeJackpot(jackpotPool.getId(), jackpotHit.getPrizeCent());
                     machineRepository.save(machine);
 
-
                     // (will do) send prize and user to risk management department
-
                 }
         );
-
-
     }
-
 }
