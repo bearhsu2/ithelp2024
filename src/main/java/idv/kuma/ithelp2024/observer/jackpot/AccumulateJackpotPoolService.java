@@ -8,13 +8,13 @@ public class AccumulateJackpotPoolService {
     private final MachineRepository machineRepository;
     private final JackpotPoolRepository jackpotPoolRepository;
     private final JackpotPoolSettingCreator jackpotPoolSettingCreator;
-    private BigScreenController bigScreenController;
+    private BigScreenController bigScreenNotifier;
 
-    public AccumulateJackpotPoolService(MachineRepository machineRepository, JackpotPoolRepository jackpotPoolRepository, JackpotPoolSettingCreator jackpotPoolSettingCreator, BigScreenController bigScreenController) {
+    public AccumulateJackpotPoolService(MachineRepository machineRepository, JackpotPoolRepository jackpotPoolRepository, JackpotPoolSettingCreator jackpotPoolSettingCreator, BigScreenController bigScreenNotifier) {
         this.machineRepository = machineRepository;
         this.jackpotPoolRepository = jackpotPoolRepository;
         this.jackpotPoolSettingCreator = jackpotPoolSettingCreator;
-        this.bigScreenController = bigScreenController;
+        this.bigScreenNotifier = bigScreenNotifier;
     }
 
     public void accumulate(long userId, long machineId, long betAmountCent) {
@@ -29,7 +29,16 @@ public class AccumulateJackpotPoolService {
         jackpotPoolRepository.save(jackpotPool);
 
         jackpotHitOpt.ifPresent(jackpotHit -> {
-                    bigScreenController.showJackpotHit(jackpotHit.getPrizeCent(), userId);
+                    // send prize and playerId to big screen
+                    bigScreenNotifier.showJackpotHit(jackpotHit.getPrizeCent(), userId);
+
+                    // send prize to machine
+                    machine.distributeJackpot(jackpotPool.getId(), jackpotHit.getPrizeCent());
+                    machineRepository.save(machine);
+
+
+                    // (will do) send prize and user to risk management department
+
                 }
         );
 
