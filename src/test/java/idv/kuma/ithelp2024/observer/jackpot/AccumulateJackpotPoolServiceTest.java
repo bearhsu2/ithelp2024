@@ -77,6 +77,10 @@ class AccumulateJackpotPoolServiceTest {
                 newJackpotPool.getAmountTenThousandth()
         ).isEqualTo(100_000_35_00L);
 
+        Assertions.assertThat(
+                bigScreenController.screenRecords
+        ).isEmpty();
+
     }
 
 }
