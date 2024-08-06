@@ -33,9 +33,10 @@ public class AccumulateJackpotPoolService {
 
                     JackpotHitEvent jackpotHitEvent = new JackpotHitEvent(jackpotHit, userId, machine.getMachineId());
 
+
                     notifyBigScreen(jackpotHitEvent);
 
-                    notifyMachine(new JackpotHitEvent(jackpotHit, userId, machine.getMachineId()));
+                    notifyMachine(jackpotHitEvent);
 
 
                     // (will do) send prize and user to risk management department
