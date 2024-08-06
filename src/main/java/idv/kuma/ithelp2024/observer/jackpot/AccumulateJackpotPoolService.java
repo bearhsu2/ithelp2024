@@ -31,9 +31,9 @@ public class AccumulateJackpotPoolService {
 
         jackpotHitOpt.ifPresent(jackpotHit -> {
 
-                    notifyBigScreen(userId, jackpotHit);
+                    notifyBigScreen(jackpotHit, userId, machine.getMachineId());
 
-                    notifyMachine(jackpotHit, machine.getMachineId());
+                    notifyMachine(jackpotHit, userId, machine.getMachineId());
 
 
                     // (will do) send prize and user to risk management department
@@ -41,12 +41,12 @@ public class AccumulateJackpotPoolService {
         );
     }
 
-    private void notifyBigScreen(long userId, JackpotHit jackpotHit) {
+    private void notifyBigScreen(JackpotHit jackpotHit, long userId, long machineId) {
         // send prize and playerId to big screen
         bigScreenNotifier.showJackpotHit(jackpotHit.getPrizeCent(), userId);
     }
 
-    private void notifyMachine(JackpotHit jackpotHit, long machineId) {
+    private void notifyMachine(JackpotHit jackpotHit, long userId, long machineId) {
 
         Machine byId = machineRepository.findById(machineId);
 
