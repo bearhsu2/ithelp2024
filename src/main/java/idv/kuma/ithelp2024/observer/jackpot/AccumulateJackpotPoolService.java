@@ -4,10 +4,10 @@ import java.util.Optional;
 
 public class AccumulateJackpotPoolService {
 
-    private final MachineRepository machineRepository;
     private final JackpotPoolRepository jackpotPoolRepository;
     private final JackpotPoolSettingCreator jackpotPoolSettingCreator;
     private final BigScreenObserver bigScreenObserver;
+    private final MachineObserver machineObserver;
 
     public AccumulateJackpotPoolService(MachineRepository machineRepository,
                                         JackpotPoolRepository jackpotPoolRepository,
@@ -15,16 +15,16 @@ public class AccumulateJackpotPoolService {
                                         BigScreenController bigScreenNotifier) {
 
 
-        this.machineRepository = machineRepository;
         this.jackpotPoolRepository = jackpotPoolRepository;
         this.jackpotPoolSettingCreator = jackpotPoolSettingCreator;
 
-        bigScreenObserver = new BigScreenObserver(bigScreenNotifier);
+        this.machineObserver = new MachineObserver(machineRepository);
+        this.bigScreenObserver = new BigScreenObserver(bigScreenNotifier);
     }
 
     public void accumulate(long userId, long machineId, long betAmountCent) {
 
-        Machine machine = machineRepository.findById(machineId);
+        Machine machine = machineObserver.machineRepository.findById(machineId);
 
         JackpotPool jackpotPool = jackpotPoolRepository.findById(machine.getJackpotPoolId());
 
@@ -39,7 +39,7 @@ public class AccumulateJackpotPoolService {
 
                     bigScreenObserver.notify(jackpotHitEvent);
 
-                    notifyMachine(jackpotHitEvent);
+                    machineObserver.notifyMachine(jackpotHitEvent);
 
 
                     // (will do) send prize and user to risk management department
@@ -49,13 +49,10 @@ public class AccumulateJackpotPoolService {
 
     private void notifyMachine(JackpotHitEvent jackpotHitEvent) {
 
-        Machine byId = machineRepository.findById(jackpotHitEvent.machineId());
-
         // send prize to machine
 
 
-        byId.distributeJackpot(jackpotHitEvent.jackpotHit().getPrizeCent());
-        machineRepository.save(byId);
+        machineObserver.notifyMachine(jackpotHitEvent);
     }
 
 
