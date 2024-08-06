@@ -38,8 +38,7 @@ public class AccumulateJackpotPoolService {
 
 
                     bigScreenObserver.notify(jackpotHitEvent);
-
-                    machineObserver.notifyMachine(jackpotHitEvent);
+                    machineObserver.notify(jackpotHitEvent);
 
 
                     // (will do) send prize and user to risk management department
@@ -52,7 +51,7 @@ public class AccumulateJackpotPoolService {
         // send prize to machine
 
 
-        machineObserver.notifyMachine(jackpotHitEvent);
+        machineObserver.notify(jackpotHitEvent);
     }
 
 

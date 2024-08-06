@@ -7,7 +7,7 @@ public class MachineObserver {
         this.machineRepository = machineRepository;
     }
 
-    void notifyMachine(JackpotHitEvent jackpotHitEvent) {
+    void notify(JackpotHitEvent jackpotHitEvent) {
         Machine byId = machineRepository.findById(jackpotHitEvent.machineId());
         // send prize to machine
         byId.distributeJackpot(jackpotHitEvent.jackpotHit().getPrizeCent());
