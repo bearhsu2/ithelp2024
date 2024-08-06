@@ -31,7 +31,9 @@ public class AccumulateJackpotPoolService {
 
         jackpotHitOpt.ifPresent(jackpotHit -> {
 
-                    notifyBigScreen(jackpotHit, userId, machine.getMachineId());
+                    JackpotHitEvent jackpotHitEvent = new JackpotHitEvent(jackpotHit, userId, machine.getMachineId());
+            
+                    notifyBigScreen(jackpotHitEvent);
 
                     notifyMachine(jackpotHit, userId, machine.getMachineId());
 
@@ -41,9 +43,9 @@ public class AccumulateJackpotPoolService {
         );
     }
 
-    private void notifyBigScreen(JackpotHit jackpotHit, long userId, long machineId) {
+    private void notifyBigScreen(JackpotHitEvent jackpotHitEvent) {
         // send prize and playerId to big screen
-        bigScreenNotifier.showJackpotHit(jackpotHit.getPrizeCent(), userId);
+        bigScreenNotifier.showJackpotHit(jackpotHitEvent.jackpotHit().getPrizeCent(), jackpotHitEvent.userId());
     }
 
     private void notifyMachine(JackpotHit jackpotHit, long userId, long machineId) {
