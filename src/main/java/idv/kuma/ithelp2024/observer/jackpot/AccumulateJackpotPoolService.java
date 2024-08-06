@@ -37,6 +37,11 @@ public class AccumulateJackpotPoolService {
                     machine.distributeJackpot(jackpotHit.getPrizeCent());
                     machineRepository.save(machine);
 
+
+
+
+
+
                     // (will do) send prize and user to risk management department
                 }
         );

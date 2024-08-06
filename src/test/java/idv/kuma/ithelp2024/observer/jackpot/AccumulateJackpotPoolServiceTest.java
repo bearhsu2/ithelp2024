@@ -18,83 +18,110 @@ class AccumulateJackpotPoolServiceTest {
             jackpotPoolSettingCreator,
             bigScreenController
     );
+    private Machine machine;
 
     @Test
     void jackpot() {
 
-        JackpotPool oldJackpotPool = JackpotPool.create(30678L, 35L);
-
-        oldJackpotPool.initialize(setting(300_000_00L, 299_999_99_00L));
-
-        jackpotPoolRepository.save(oldJackpotPool);
-
-        Machine machine = machine(207, 30678L);
-
-        machineRepository.save(machine);
-
-
-        jackpotPoolSettingCreator.setNext(
-                setting(400_000_00L, 150_000_00_00L)
+        given_jackpot_pool(JackpotPool.create(30678L, 35L),
+                setting(300_000_00L, 299_999_99_00L)
         );
 
-        sut.accumulate(9527L, 207L, 100_00L);
+        given_machine(machine(207, 30678L));
 
-        JackpotPool newJackpotPool = jackpotPoolRepository.findById(30678L);
+        given_next_created_setting(setting(400_000_00L, 150_000_00_00L));
 
-        Assertions.assertThat(
-                newJackpotPool.getAmountTenThousandth()
-        ).isEqualTo(150_000_00_00L);
+        when_accumulate(9527L, 207L, 100_00L);
 
-        Assertions.assertThat(
-                bigScreenController.screenRecords.get(0)
-        ).isEqualTo(new ScreenRecord(300_000_00L, 9527L));
+        then_pool_amount_should_be(150_000_00_00L);
 
-        Assertions.assertThat(
-                machine.getDistributeRecord().get(0)
-        ).isEqualTo(new DistributeRecord(300_000_00L));
+        then_big_screen_should_notify(300_000_00L, 9527L);
 
+        then_machine_should_distribute_prize(300_000_00L);
+
+    }
+
+    private void given_jackpot_pool(JackpotPool oldJackpotPool, JackpotPoolSetting setting) {
+
+        oldJackpotPool.initialize(setting);
+
+        jackpotPoolRepository.save(oldJackpotPool);
     }
 
     private JackpotPoolSetting setting(long prizeCent, long amountTenThousandth) {
         return new JackpotPoolSetting(prizeCent, amountTenThousandth);
     }
 
+    private void given_machine(Machine machine) {
+        this.machine = machine;
+
+        machineRepository.save(this.machine);
+    }
+
     private Machine machine(int machineId, long jackpotPoolId) {
         return new Machine(machineId, jackpotPoolId);
+    }
+
+    private void given_next_created_setting(JackpotPoolSetting setting) {
+        jackpotPoolSettingCreator.setNext(
+                setting
+        );
+    }
+
+    private void when_accumulate(long userId, long machineId, long betAmountCent) {
+        sut.accumulate(userId, machineId, betAmountCent);
+    }
+
+    private void then_pool_amount_should_be(long expected) {
+        JackpotPool newJackpotPool = jackpotPoolRepository.findById(30678L);
+
+        Assertions.assertThat(
+                newJackpotPool.getAmountTenThousandth()
+        ).isEqualTo(expected);
+    }
+
+    private void then_big_screen_should_notify(long prizeCent, long userId) {
+        Assertions.assertThat(
+                bigScreenController.screenRecords.get(0)
+        ).isEqualTo(new ScreenRecord(prizeCent, userId));
+    }
+
+    private void then_machine_should_distribute_prize(long prizeCent) {
+        Assertions.assertThat(
+                machine.getDistributeRecord().get(0)
+        ).isEqualTo(new DistributeRecord(prizeCent));
     }
 
     @Test
     void no_jackpot() {
 
 
-        JackpotPool oldJackpotPool = JackpotPool.create(30678L, 35L);
+        given_jackpot_pool(JackpotPool.create(30678L, 35L),
+                setting(300_000_00L, 100_000_00_00L));
 
-        oldJackpotPool.initialize(setting(300_000_00L, 100_000_00_00L));
+        given_machine(machine(207, 30678L));
 
-        jackpotPoolRepository.save(oldJackpotPool);
+        when_accumulate(9527L, 207L, 100_00L);
 
-        Machine machine = machine(207, 30678L);
+        then_pool_amount_should_be(100_000_35_00L);
 
-        machineRepository.save(machine);
+        then_NEVER_notified_big_screen();
 
-        sut.accumulate(9527L, 207L, 100_00L);
+        then_NEVER_distributed_prize();
 
-        JackpotPool newJackpotPool = jackpotPoolRepository.findById(30678L);
 
-        Assertions.assertThat(
-                newJackpotPool.getAmountTenThousandth()
-        ).isEqualTo(100_000_35_00L);
+    }
 
+    private void then_NEVER_notified_big_screen() {
         Assertions.assertThat(
                 bigScreenController.screenRecords
         ).isEmpty();
+    }
 
-
+    private void then_NEVER_distributed_prize() {
         Assertions.assertThat(
                 machine.getDistributeRecord()
         ).isEmpty();
-
-
     }
 
 }
