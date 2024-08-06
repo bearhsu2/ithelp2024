@@ -7,9 +7,9 @@ public class AccumulateJackpotPoolService {
 
     private final JackpotPoolRepository jackpotPoolRepository;
     private final JackpotPoolSettingCreator jackpotPoolSettingCreator;
+    private final MachineRepository machineRepository;
 
     private final List<JackpotHitObserver> observers;
-    private final MachineRepository machineRepository;
 
     public AccumulateJackpotPoolService(JackpotPoolRepository jackpotPoolRepository,
                                         JackpotPoolSettingCreator jackpotPoolSettingCreator,
@@ -38,14 +38,17 @@ public class AccumulateJackpotPoolService {
 
                     JackpotHitEvent jackpotHitEvent = new JackpotHitEvent(jackpotHit, userId, machine.getMachineId());
 
-                    for (JackpotHitObserver observer : observers) {
-                        observer.notify(jackpotHitEvent);
-                    }
-
+                    notifyObservers(jackpotHitEvent);
 
                     // (will do) send prize and user to risk management department
                 }
         );
+    }
+
+    private void notifyObservers(JackpotHitEvent jackpotHitEvent) {
+        for (JackpotHitObserver observer : observers) {
+            observer.notify(jackpotHitEvent);
+        }
     }
 
 }
