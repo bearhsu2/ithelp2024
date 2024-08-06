@@ -7,16 +7,19 @@ public class AccumulateJackpotPoolService {
     private final MachineRepository machineRepository;
     private final JackpotPoolRepository jackpotPoolRepository;
     private final JackpotPoolSettingCreator jackpotPoolSettingCreator;
-    private BigScreenController bigScreenNotifier;
+    private final BigScreenObserver bigScreenObserver;
 
     public AccumulateJackpotPoolService(MachineRepository machineRepository,
                                         JackpotPoolRepository jackpotPoolRepository,
                                         JackpotPoolSettingCreator jackpotPoolSettingCreator,
                                         BigScreenController bigScreenNotifier) {
+
+
         this.machineRepository = machineRepository;
         this.jackpotPoolRepository = jackpotPoolRepository;
         this.jackpotPoolSettingCreator = jackpotPoolSettingCreator;
-        this.bigScreenNotifier = bigScreenNotifier;
+
+        bigScreenObserver = new BigScreenObserver(bigScreenNotifier);
     }
 
     public void accumulate(long userId, long machineId, long betAmountCent) {
@@ -34,7 +37,7 @@ public class AccumulateJackpotPoolService {
                     JackpotHitEvent jackpotHitEvent = new JackpotHitEvent(jackpotHit, userId, machine.getMachineId());
 
 
-                    notifyBigScreen(jackpotHitEvent);
+                    bigScreenObserver.notifyBigScreen(jackpotHitEvent);
 
                     notifyMachine(jackpotHitEvent);
 
@@ -42,11 +45,6 @@ public class AccumulateJackpotPoolService {
                     // (will do) send prize and user to risk management department
                 }
         );
-    }
-
-    private void notifyBigScreen(JackpotHitEvent jackpotHitEvent) {
-        // send prize and playerId to big screen
-        bigScreenNotifier.showJackpotHit(jackpotHitEvent.jackpotHit().getPrizeCent(), jackpotHitEvent.userId());
     }
 
     private void notifyMachine(JackpotHitEvent jackpotHitEvent) {
@@ -59,4 +57,6 @@ public class AccumulateJackpotPoolService {
         byId.distributeJackpot(jackpotHitEvent.jackpotHit().getPrizeCent());
         machineRepository.save(byId);
     }
+
+ 
 }
