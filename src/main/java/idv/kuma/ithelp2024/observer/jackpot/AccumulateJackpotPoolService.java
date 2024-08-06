@@ -1,5 +1,6 @@
 package idv.kuma.ithelp2024.observer.jackpot;
 
+import java.util.List;
 import java.util.Optional;
 
 public class AccumulateJackpotPoolService {
@@ -8,11 +9,14 @@ public class AccumulateJackpotPoolService {
     private final JackpotPoolSettingCreator jackpotPoolSettingCreator;
 
     private final BigScreenObserver bigScreenObserver;
+    private final List<JackpotHitObserver> observers;
     private final MachineObserver machineObserver;
 
     public AccumulateJackpotPoolService(JackpotPoolRepository jackpotPoolRepository,
                                         JackpotPoolSettingCreator jackpotPoolSettingCreator,
-                                        MachineObserver machineObserver, BigScreenObserver bigScreenObserver) {
+                                        MachineObserver machineObserver,
+                                        BigScreenObserver bigScreenObserver,
+                                        List<JackpotHitObserver> observers) {
 
 
         this.jackpotPoolRepository = jackpotPoolRepository;
@@ -20,6 +24,7 @@ public class AccumulateJackpotPoolService {
 
         this.machineObserver = machineObserver;
         this.bigScreenObserver = bigScreenObserver;
+        this.observers = observers;
     }
 
     public void accumulate(long userId, long machineId, long betAmountCent) {
@@ -36,9 +41,12 @@ public class AccumulateJackpotPoolService {
 
                     JackpotHitEvent jackpotHitEvent = new JackpotHitEvent(jackpotHit, userId, machine.getMachineId());
 
+                    for (JackpotHitObserver observer : observers) {
+                        observer.notify(jackpotHitEvent);
+                    }
 
-                    bigScreenObserver.notify(jackpotHitEvent);
-                    machineObserver.notify(jackpotHitEvent);
+//                    bigScreenObserver.notify(jackpotHitEvent);
+//                    machineObserver.notify(jackpotHitEvent);
 
 
                     // (will do) send prize and user to risk management department

@@ -4,6 +4,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 @Disabled
 class AccumulateJackpotPoolServiceTest {
 
@@ -12,10 +14,19 @@ class AccumulateJackpotPoolServiceTest {
     private final FakeJackpotPoolSettingCreator jackpotPoolSettingCreator = new FakeJackpotPoolSettingCreator();
     private final FakeBigScreenController bigScreenController = new FakeBigScreenController();
 
+    private List<JackpotHitObserver> observers = List.of(
+            new BigScreenObserver(bigScreenController),
+            new MachineObserver(machineRepository)
+    );
+
+
+
     private final AccumulateJackpotPoolService sut = new AccumulateJackpotPoolService(
             jackpotPoolRepository,
             jackpotPoolSettingCreator,
-            new MachineObserver(machineRepository), new BigScreenObserver(bigScreenController)
+            new MachineObserver(machineRepository),
+            new BigScreenObserver(bigScreenController),
+            observers
     );
 
     private Machine machine;
