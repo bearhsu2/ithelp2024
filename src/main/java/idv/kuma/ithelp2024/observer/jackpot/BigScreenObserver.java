@@ -8,7 +8,7 @@ public class BigScreenObserver {
         this.bigScreenNotifier = bigScreenNotifier;
     }
 
-    void notifyBigScreen(JackpotHitEvent jackpotHitEvent) {
+    void notify(JackpotHitEvent jackpotHitEvent) {
         // send prize and playerId to big screen
         bigScreenNotifier.showJackpotHit(jackpotHitEvent.jackpotHit().getPrizeCent(), jackpotHitEvent.userId());
     }

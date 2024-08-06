@@ -37,7 +37,7 @@ public class AccumulateJackpotPoolService {
                     JackpotHitEvent jackpotHitEvent = new JackpotHitEvent(jackpotHit, userId, machine.getMachineId());
 
 
-                    bigScreenObserver.notifyBigScreen(jackpotHitEvent);
+                    bigScreenObserver.notify(jackpotHitEvent);
 
                     notifyMachine(jackpotHitEvent);
 
@@ -58,5 +58,5 @@ public class AccumulateJackpotPoolService {
         machineRepository.save(byId);
     }
 
- 
+
 }
