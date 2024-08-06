@@ -33,7 +33,7 @@ public class AccumulateJackpotPoolService {
 
                     notifyBigScreen(userId, jackpotHit);
 
-                    notifyMachine(jackpotHit, machine);
+                    notifyMachine(jackpotHit, machine.getMachineId());
 
 
                     // (will do) send prize and user to risk management department
@@ -46,9 +46,14 @@ public class AccumulateJackpotPoolService {
         bigScreenNotifier.showJackpotHit(jackpotHit.getPrizeCent(), userId);
     }
 
-    private void notifyMachine(JackpotHit jackpotHit, Machine machine) {
+    private void notifyMachine(JackpotHit jackpotHit, long machineId) {
+
+        Machine byId = machineRepository.findById(machineId);
+
         // send prize to machine
-        machine.distributeJackpot(jackpotHit.getPrizeCent());
-        machineRepository.save(machine);
+
+
+        byId.distributeJackpot(jackpotHit.getPrizeCent());
+        machineRepository.save(byId);
     }
 }
