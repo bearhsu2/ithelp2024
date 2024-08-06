@@ -8,16 +8,12 @@ public class AccumulateJackpotPoolService {
     private final JackpotPoolRepository jackpotPoolRepository;
     private final JackpotPoolSettingCreator jackpotPoolSettingCreator;
 
-    private final BigScreenObserver bigScreenObserver;
     private final List<JackpotHitObserver> observers;
     private final MachineRepository machineRepository;
-    private final MachineObserver machineObserver;
 
     public AccumulateJackpotPoolService(JackpotPoolRepository jackpotPoolRepository,
                                         JackpotPoolSettingCreator jackpotPoolSettingCreator,
                                         MachineRepository machineRepository,
-                                        MachineObserver machineObserver,
-                                        BigScreenObserver bigScreenObserver,
                                         List<JackpotHitObserver> observers) {
 
 
@@ -25,8 +21,6 @@ public class AccumulateJackpotPoolService {
         this.jackpotPoolSettingCreator = jackpotPoolSettingCreator;
         this.machineRepository = machineRepository;
 
-        this.machineObserver = machineObserver;
-        this.bigScreenObserver = bigScreenObserver;
         this.observers = observers;
     }
 
