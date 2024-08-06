@@ -24,6 +24,7 @@ class AccumulateJackpotPoolServiceTest {
     private final AccumulateJackpotPoolService sut = new AccumulateJackpotPoolService(
             jackpotPoolRepository,
             jackpotPoolSettingCreator,
+            machineRepository,
             new MachineObserver(machineRepository),
             new BigScreenObserver(bigScreenController),
             observers

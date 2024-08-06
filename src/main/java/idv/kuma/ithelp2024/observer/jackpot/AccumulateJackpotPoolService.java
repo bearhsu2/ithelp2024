@@ -10,10 +10,12 @@ public class AccumulateJackpotPoolService {
 
     private final BigScreenObserver bigScreenObserver;
     private final List<JackpotHitObserver> observers;
+    private final MachineRepository machineRepository;
     private final MachineObserver machineObserver;
 
     public AccumulateJackpotPoolService(JackpotPoolRepository jackpotPoolRepository,
                                         JackpotPoolSettingCreator jackpotPoolSettingCreator,
+                                        MachineRepository machineRepository,
                                         MachineObserver machineObserver,
                                         BigScreenObserver bigScreenObserver,
                                         List<JackpotHitObserver> observers) {
@@ -21,6 +23,7 @@ public class AccumulateJackpotPoolService {
 
         this.jackpotPoolRepository = jackpotPoolRepository;
         this.jackpotPoolSettingCreator = jackpotPoolSettingCreator;
+        this.machineRepository = machineRepository;
 
         this.machineObserver = machineObserver;
         this.bigScreenObserver = bigScreenObserver;
@@ -29,7 +32,7 @@ public class AccumulateJackpotPoolService {
 
     public void accumulate(long userId, long machineId, long betAmountCent) {
 
-        Machine machine = machineObserver.machineRepository.findById(machineId);
+        Machine machine = machineRepository.findById(machineId);
 
         JackpotPool jackpotPool = jackpotPoolRepository.findById(machine.getJackpotPoolId());
 
@@ -45,22 +48,10 @@ public class AccumulateJackpotPoolService {
                         observer.notify(jackpotHitEvent);
                     }
 
-//                    bigScreenObserver.notify(jackpotHitEvent);
-//                    machineObserver.notify(jackpotHitEvent);
-
 
                     // (will do) send prize and user to risk management department
                 }
         );
     }
-
-    private void notifyMachine(JackpotHitEvent jackpotHitEvent) {
-
-        // send prize to machine
-
-
-        machineObserver.notify(jackpotHitEvent);
-    }
-
 
 }
