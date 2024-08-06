@@ -30,20 +30,25 @@ public class AccumulateJackpotPoolService {
         jackpotPoolRepository.save(jackpotPool);
 
         jackpotHitOpt.ifPresent(jackpotHit -> {
-                    // send prize and playerId to big screen
-                    bigScreenNotifier.showJackpotHit(jackpotHit.getPrizeCent(), userId);
 
-                    // send prize to machine
-                    machine.distributeJackpot(jackpotHit.getPrizeCent());
-                    machineRepository.save(machine);
+                    notifyBigScreen(userId, jackpotHit);
 
-
-
-
+                    notifyMachine(jackpotHit, machine);
 
 
                     // (will do) send prize and user to risk management department
                 }
         );
+    }
+
+    private void notifyBigScreen(long userId, JackpotHit jackpotHit) {
+        // send prize and playerId to big screen
+        bigScreenNotifier.showJackpotHit(jackpotHit.getPrizeCent(), userId);
+    }
+
+    private void notifyMachine(JackpotHit jackpotHit, Machine machine) {
+        // send prize to machine
+        machine.distributeJackpot(jackpotHit.getPrizeCent());
+        machineRepository.save(machine);
     }
 }
