@@ -32,10 +32,10 @@ public class AccumulateJackpotPoolService {
         jackpotHitOpt.ifPresent(jackpotHit -> {
 
                     JackpotHitEvent jackpotHitEvent = new JackpotHitEvent(jackpotHit, userId, machine.getMachineId());
-            
+
                     notifyBigScreen(jackpotHitEvent);
 
-                    notifyMachine(jackpotHit, userId, machine.getMachineId());
+                    notifyMachine(new JackpotHitEvent(jackpotHit, userId, machine.getMachineId()));
 
 
                     // (will do) send prize and user to risk management department
@@ -48,14 +48,14 @@ public class AccumulateJackpotPoolService {
         bigScreenNotifier.showJackpotHit(jackpotHitEvent.jackpotHit().getPrizeCent(), jackpotHitEvent.userId());
     }
 
-    private void notifyMachine(JackpotHit jackpotHit, long userId, long machineId) {
+    private void notifyMachine(JackpotHitEvent jackpotHitEvent) {
 
-        Machine byId = machineRepository.findById(machineId);
+        Machine byId = machineRepository.findById(jackpotHitEvent.machineId());
 
         // send prize to machine
 
 
-        byId.distributeJackpot(jackpotHit.getPrizeCent());
+        byId.distributeJackpot(jackpotHitEvent.jackpotHit().getPrizeCent());
         machineRepository.save(byId);
     }
 }
