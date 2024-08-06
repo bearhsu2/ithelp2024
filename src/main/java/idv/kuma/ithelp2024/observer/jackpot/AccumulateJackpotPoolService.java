@@ -6,6 +6,7 @@ public class AccumulateJackpotPoolService {
 
     private final JackpotPoolRepository jackpotPoolRepository;
     private final JackpotPoolSettingCreator jackpotPoolSettingCreator;
+
     private final BigScreenObserver bigScreenObserver;
     private final MachineObserver machineObserver;
 
