@@ -34,15 +34,9 @@ public class AccumulateJackpotPoolService {
 
         jackpotPoolRepository.save(jackpotPool);
 
-        jackpotHitOpt.ifPresent(jackpotHit -> {
+        jackpotHitOpt.map(jackpotHit -> new JackpotHitEvent(jackpotHit, userId, machine.getMachineId()))
+                .ifPresent(this::notifyObservers);
 
-                    JackpotHitEvent jackpotHitEvent = new JackpotHitEvent(jackpotHit, userId, machine.getMachineId());
-
-                    notifyObservers(jackpotHitEvent);
-
-                    // (will do) send prize and user to risk management department
-                }
-        );
     }
 
     private void notifyObservers(JackpotHitEvent jackpotHitEvent) {
