@@ -10,17 +10,16 @@ public class AccumulateJackpotPoolService {
     private final BigScreenObserver bigScreenObserver;
     private final MachineObserver machineObserver;
 
-    public AccumulateJackpotPoolService(MachineRepository machineRepository,
-                                        JackpotPoolRepository jackpotPoolRepository,
+    public AccumulateJackpotPoolService(JackpotPoolRepository jackpotPoolRepository,
                                         JackpotPoolSettingCreator jackpotPoolSettingCreator,
-                                        BigScreenController bigScreenNotifier) {
+                                        MachineObserver machineObserver, BigScreenObserver bigScreenObserver) {
 
 
         this.jackpotPoolRepository = jackpotPoolRepository;
         this.jackpotPoolSettingCreator = jackpotPoolSettingCreator;
 
-        this.machineObserver = new MachineObserver(machineRepository);
-        this.bigScreenObserver = new BigScreenObserver(bigScreenNotifier);
+        this.machineObserver = machineObserver;
+        this.bigScreenObserver = bigScreenObserver;
     }
 
     public void accumulate(long userId, long machineId, long betAmountCent) {

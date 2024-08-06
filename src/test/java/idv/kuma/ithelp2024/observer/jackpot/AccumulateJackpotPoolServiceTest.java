@@ -13,11 +13,11 @@ class AccumulateJackpotPoolServiceTest {
     private final FakeBigScreenController bigScreenController = new FakeBigScreenController();
 
     private final AccumulateJackpotPoolService sut = new AccumulateJackpotPoolService(
-            machineRepository,
             jackpotPoolRepository,
             jackpotPoolSettingCreator,
-            bigScreenController
+            new MachineObserver(machineRepository), new BigScreenObserver(bigScreenController)
     );
+
     private Machine machine;
 
     @Test
