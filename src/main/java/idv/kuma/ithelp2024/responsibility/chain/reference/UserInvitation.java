@@ -1,9 +1,9 @@
 package idv.kuma.ithelp2024.responsibility.chain.reference;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 @AllArgsConstructor
 public class UserInvitation {
     private final long inviterId;

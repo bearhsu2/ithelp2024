@@ -28,7 +28,7 @@ class AddInvitationServiceTest {
         sut.add(2L, "ABCD001");
 
         Optional<UserInvitation> userInvitation = userInvitationRepository.find(invitee.getId());
-        Assertions.assertThat(userInvitation).isNotEmpty();
+        Assertions.assertThat(userInvitation).contains(new UserInvitation(1L, 2L));
 
     }
 }
