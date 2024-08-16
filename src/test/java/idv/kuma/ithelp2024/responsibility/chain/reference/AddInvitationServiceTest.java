@@ -15,6 +15,34 @@ class AddInvitationServiceTest {
     private AddInvitationService sut = new AddInvitationService(userRepository, userInvitationRepository);
 
     @Test
+    void invitee_not_found() throws Exception {
+
+        User inviter = user(1L, "john@gmail.com", "ABCD001");
+        userRepository.save(inviter);
+
+        Assertions.assertThatThrownBy(() -> sut.add(2L, "ABCD001"))
+                .isInstanceOf(Exception.class)
+                .hasMessage("Invitee not found");
+
+    }
+
+    private User user(long id, String email, String invitationCode) {
+        return new User(id, email, invitationCode);
+    }
+
+    @Test
+    void inviter_not_found() throws Exception {
+
+        User invitee = user(2L, "mary@gmail.com", "XYZZ996");
+        userRepository.save(invitee);
+
+        Assertions.assertThatThrownBy(() -> sut.add(2L, "ABCD001"))
+                .isInstanceOf(Exception.class)
+                .hasMessage("Inviter not found");
+
+    }
+
+    @Test
     void all_ok() throws Exception {
 
         User inviter = user(1L, "john@gmail.com", "ABCD001");
@@ -28,9 +56,5 @@ class AddInvitationServiceTest {
         Assertions.assertThat(userInvitationRepository.find(invitee.getId()))
                 .contains(new UserInvitation(1L, 2L));
 
-    }
-
-    private User user(long id, String email, String invitationCode) {
-        return new User(id, email, invitationCode);
     }
 }
