@@ -17,7 +17,7 @@ class AddInvitationServiceTest {
     private AddInvitationService sut = new AddInvitationService(userRepository, userInvitationRepository);
 
     @Test
-    void all_ok() {
+    void all_ok() throws Exception {
 
         User inviter = new User(1L, "john@gmail.com", "ABCD001");
         User invitee = new User(2L, "mary@gmail.com", "XYZZ996");

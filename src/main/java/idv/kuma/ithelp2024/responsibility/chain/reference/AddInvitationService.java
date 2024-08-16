@@ -14,13 +14,13 @@ public class AddInvitationService {
         this.userInvitationRepository = userInvitationRepository;
     }
 
-    public void add(long inviteeId, String code) {
+    public void add(long inviteeId, String code) throws Exception {
 
-        User inviter = userRepository.findByCode(code).orElseThrow(() -> new RuntimeException("Inviter not found"));
+        User inviter = userRepository.findByCode(code).orElseThrow(() -> new Exception("Inviter not found"));
 
         Optional<UserInvitation> userInvitationOpt = userInvitationRepository.find(inviteeId);
         if (userInvitationOpt.isPresent()) {
-            throw new RuntimeException("Already invited");
+            throw new Exception("Already invited");
         }
 
         UserInvitation userInvitation = new UserInvitation(
