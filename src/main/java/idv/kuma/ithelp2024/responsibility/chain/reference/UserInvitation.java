@@ -5,8 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-class User {
-    private final long id;
-    private final String referenceCode;
-
+public class UserInvitation {
+    private final long inviterId;
+    private final long inviteeId;
 }
