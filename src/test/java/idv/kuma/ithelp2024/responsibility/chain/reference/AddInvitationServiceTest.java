@@ -57,4 +57,23 @@ class AddInvitationServiceTest {
                 .contains(new UserInvitation(1L, 2L));
 
     }
+
+    @Test
+    void already_invited() throws Exception {
+
+        User inviter = user(1L, "john@gmail.com", "ABCD001");
+        User invitee = user(2L, "mary@gmail.com", "XYZZ996");
+        User third_guy = user(2L, "mary@gmail.com", "STHELSE");
+
+        userRepository.save(inviter);
+        userRepository.save(invitee);
+        userRepository.save(third_guy);
+
+        sut.add(2L, "ABCD001");
+
+        Assertions.assertThatThrownBy(() -> sut.add(2L, "STHELSE"))
+                .isInstanceOf(Exception.class)
+                .hasMessage("Already invited");
+        
+    }
 }
