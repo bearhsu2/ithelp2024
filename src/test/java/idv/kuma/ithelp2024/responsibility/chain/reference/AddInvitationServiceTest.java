@@ -74,6 +74,6 @@ class AddInvitationServiceTest {
         Assertions.assertThatThrownBy(() -> sut.add(2L, "STHELSE"))
                 .isInstanceOf(Exception.class)
                 .hasMessage("Already invited");
-        
+
     }
 }
