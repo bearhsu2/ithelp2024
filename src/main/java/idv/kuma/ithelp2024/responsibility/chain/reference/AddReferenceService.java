@@ -1,6 +1,8 @@
 package idv.kuma.ithelp2024.responsibility.chain.reference;
 
 public class AddReferenceService {
+    public void add(long l, String abcd001) {
+    }
 
     //1. 每個 User 都有一個專屬邀請碼
     //2. 新玩家輸入別人的邀請碼時，先透過邀請碼找到老玩家

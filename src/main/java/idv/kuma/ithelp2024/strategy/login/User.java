@@ -5,7 +5,7 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class User {
+class User {
     private final long id;
     private final String email;
 
