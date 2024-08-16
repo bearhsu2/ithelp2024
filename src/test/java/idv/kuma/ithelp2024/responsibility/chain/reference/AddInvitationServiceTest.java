@@ -7,8 +7,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
 @Disabled
 class AddInvitationServiceTest {
 
@@ -19,16 +17,20 @@ class AddInvitationServiceTest {
     @Test
     void all_ok() throws Exception {
 
-        User inviter = new User(1L, "john@gmail.com", "ABCD001");
-        User invitee = new User(2L, "mary@gmail.com", "XYZZ996");
+        User inviter = user(1L, "john@gmail.com", "ABCD001");
+        User invitee = user(2L, "mary@gmail.com", "XYZZ996");
 
         userRepository.save(inviter);
         userRepository.save(invitee);
 
         sut.add(2L, "ABCD001");
 
-        Optional<UserInvitation> userInvitation = userInvitationRepository.find(invitee.getId());
-        Assertions.assertThat(userInvitation).contains(new UserInvitation(1L, 2L));
+        Assertions.assertThat(userInvitationRepository.find(invitee.getId()))
+                .contains(new UserInvitation(1L, 2L));
 
+    }
+
+    private User user(long id, String email, String invitationCode) {
+        return new User(id, email, invitationCode);
     }
 }
