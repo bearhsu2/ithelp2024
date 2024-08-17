@@ -5,11 +5,11 @@ import idv.kuma.ithelp2024.strategy.login.UserRepository;
 
 import java.util.Optional;
 
-public class AddInvitationService {
+public class AcceptInvitationService {
     private final UserRepository userRepository;
     private final UserInvitationRepository userInvitationRepository;
 
-    public AddInvitationService(UserRepository userRepository, UserInvitationRepository userInvitationRepository) {
+    public AcceptInvitationService(UserRepository userRepository, UserInvitationRepository userInvitationRepository) {
         this.userRepository = userRepository;
         this.userInvitationRepository = userInvitationRepository;
     }

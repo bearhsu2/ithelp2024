@@ -12,7 +12,7 @@ class AddInvitationServiceTest {
 
     private UserRepository userRepository = new DummyUserRepository();
     private UserInvitationRepository userInvitationRepository = new FakeUserInvitationRepository();
-    private AddInvitationService sut = new AddInvitationService(userRepository, userInvitationRepository);
+    private AcceptInvitationService sut = new AcceptInvitationService(userRepository, userInvitationRepository);
 
     @Test
     void invitee_not_found() throws Exception {
