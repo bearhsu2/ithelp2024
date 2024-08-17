@@ -16,8 +16,7 @@ public class AddInvitationService {
 
     public void add(long inviteeId, String code) throws Exception {
 
-        User inviter = userRepository
-                .findByCode(code)
+        User inviter = userRepository.findByCode(code)
                 .orElseThrow(() -> new Exception("Inviter not found"));
         User invitee = Optional.ofNullable(userRepository.find(inviteeId))
                 .orElseThrow(() -> new Exception("Invitee not found"));
@@ -36,13 +35,5 @@ public class AddInvitationService {
         userInvitationRepository.save(userInvitation);
         userRepository.save(inviter);
         userRepository.save(invitee);
-
-
     }
-
-    //1. 每個 User 都有一個專屬邀請碼
-    //2. 新玩家輸入別人的邀請碼時，先透過邀請碼找到老玩家
-    //3. 確認新玩家還沒被別人邀請過
-    //4. 記錄這次的邀請關係，以免多次贈獎
-    //5. 為這兩位玩家都加 1,000 遊戲點數
 }
