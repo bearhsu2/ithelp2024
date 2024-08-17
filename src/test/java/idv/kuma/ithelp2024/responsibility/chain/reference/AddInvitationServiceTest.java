@@ -27,7 +27,7 @@ class AddInvitationServiceTest {
     }
 
     private User user(long id, String email, String invitationCode) {
-        return new User(id, email, invitationCode);
+        return User.create(id, email, invitationCode);
     }
 
     @Test
@@ -55,6 +55,10 @@ class AddInvitationServiceTest {
 
         Assertions.assertThat(userInvitationRepository.find(invitee.getId()))
                 .contains(new UserInvitation(1L, 2L));
+        Assertions.assertThat(userRepository.find(1L).getWallet().getBalance())
+                .isEqualTo(1_000);
+        Assertions.assertThat(userRepository.find(2L).getWallet().getBalance())
+                .isEqualTo(1_000);
 
     }
 

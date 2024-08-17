@@ -17,7 +17,7 @@ public class AddInvitationService {
     public void add(long inviteeId, String code) throws Exception {
 
         User inviter = userRepository.findByCode(code).orElseThrow(() -> new Exception("Inviter not found"));
-        Optional.ofNullable(userRepository.find(inviteeId)).orElseThrow(() -> new Exception("Invitee not found"));
+        User invitee = Optional.ofNullable(userRepository.find(inviteeId)).orElseThrow(() -> new Exception("Invitee not found"));
 
         Optional<UserInvitation> userInvitationOpt = userInvitationRepository.find(inviteeId);
         if (userInvitationOpt.isPresent()) {
@@ -27,8 +27,12 @@ public class AddInvitationService {
         UserInvitation userInvitation = new UserInvitation(
                 inviter.getId(), inviteeId
         );
+        inviter.getWallet().add(1_000);
+        invitee.getWallet().add(1_000);
 
         userInvitationRepository.save(userInvitation);
+        userRepository.save(inviter);
+        userRepository.save(invitee);
 
 
     }

@@ -52,7 +52,7 @@ class LoginServiceTest {
     }
 
     private User user(long id, String email) {
-        return new User(id, email, "ABCD001");
+        return User.create(id, email, "ABCD001");
     }
 
     private void when_login(LoginType loginType, long userId, String token) {
