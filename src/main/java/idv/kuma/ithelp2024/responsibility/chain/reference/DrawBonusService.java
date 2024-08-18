@@ -30,7 +30,7 @@ public class DrawBonusService {
         user.getWallet().add(bonus.bonusAmount());
 
         userRepository.save(user);
-        
+
 
     }
 }

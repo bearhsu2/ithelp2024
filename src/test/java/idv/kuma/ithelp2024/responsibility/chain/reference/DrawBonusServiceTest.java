@@ -7,19 +7,20 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class DrawBonusServiceTest {
+
+    private BonusRepository bonusRepository = new FakeBonusRepository();
+    private UserRepository userRepository = new DummyUserRepository();
+    private DrawBonusService sut = new DrawBonusService(
+            userRepository, bonusRepository
+    );
+
     @Test
     void all_ok() {
 
-        BonusRepository bonusRepository = new FakeBonusRepository();
         bonusRepository.save(new Bonus("AAABB", 1_000));
 
-        UserRepository userRepository = new DummyUserRepository();
-        User user = User.create(1L, "abc@gmail.com", "AAABB");
-        userRepository.save(user);
+        userRepository.save(User.create(1L, "abc@gmail.com", "AAABB"));
 
-        DrawBonusService sut = new DrawBonusService(
-                userRepository, bonusRepository
-        );
         sut.draw(1L, "AAABB");
 
         Assertions.assertThat(userRepository.find(1L).getWallet().getBalance())
