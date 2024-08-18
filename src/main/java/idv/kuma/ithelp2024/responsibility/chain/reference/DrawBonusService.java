@@ -3,6 +3,8 @@ package idv.kuma.ithelp2024.responsibility.chain.reference;
 import idv.kuma.ithelp2024.strategy.login.User;
 import idv.kuma.ithelp2024.strategy.login.UserRepository;
 
+import java.util.Optional;
+
 public class DrawBonusService {
 
     private final UserRepository userRepository;
@@ -23,7 +25,8 @@ public class DrawBonusService {
         Bonus bonus = bonusRepository.findByCode(bonusCode)
                 .orElseThrow(() -> new Exception("Bonus not found"));
 
-        User user = userRepository.find(userId);
+        User user = Optional.ofNullable(userRepository.find(userId))
+                .orElseThrow(() -> new Exception("User not found"));
 
         user.getWallet().add(bonus.bonusAmount());
 
