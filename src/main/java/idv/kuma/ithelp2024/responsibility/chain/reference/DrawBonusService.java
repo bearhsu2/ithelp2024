@@ -3,8 +3,6 @@ package idv.kuma.ithelp2024.responsibility.chain.reference;
 import idv.kuma.ithelp2024.strategy.login.User;
 import idv.kuma.ithelp2024.strategy.login.UserRepository;
 
-import java.util.Optional;
-
 public class DrawBonusService {
 
     private final UserRepository userRepository;
@@ -22,13 +20,8 @@ public class DrawBonusService {
     // 如果還沒領過，則領取，並新增一筆領取紀錄
     public void draw(long userId, String bonusCode) throws Exception {
 
-        Optional<Bonus> bonusOpt = bonusRepository.findByCode(bonusCode);
-
-        if (!bonusOpt.isPresent()) {
-            throw new Exception("Bonus not found");
-        }
-
-        Bonus bonus = bonusOpt.get();
+        Bonus bonus = bonusRepository.findByCode(bonusCode)
+                .orElseThrow(() -> new Exception("Bonus not found"));
 
         User user = userRepository.find(userId);
 
