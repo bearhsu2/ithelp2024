@@ -15,7 +15,23 @@ class DrawBonusServiceTest {
     );
 
     @Test
-    void all_ok() {
+    void bonus_code_not_exists() {
+
+//        bonusRepository.save(new Bonus("AAABB", 1_000));
+
+        userRepository.save(User.create(1L, "abc@gmail.com", "AAABB"));
+
+        Assertions.assertThatThrownBy(() -> sut.draw(1L, "BBBAA"))
+                .isInstanceOf(Exception.class)
+                .hasMessage("Bonus not found");
+
+//        Assertions.assertThat(userRepository.find(1L).getWallet().getBalance())
+//                .isEqualTo(1_000);
+
+    }
+
+    @Test
+    void all_ok() throws Exception {
 
         bonusRepository.save(new Bonus("AAABB", 1_000));
 

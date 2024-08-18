@@ -20,9 +20,14 @@ public class DrawBonusService {
     // 如果用不存在，則丟錯
     // 如果已領過，則不再領取，並丟錯
     // 如果還沒領過，則領取，並新增一筆領取紀錄
-    public void draw(long userId, String bonusCode) {
+    public void draw(long userId, String bonusCode) throws Exception {
 
         Optional<Bonus> bonusOpt = bonusRepository.findByCode(bonusCode);
+
+        if (!bonusOpt.isPresent()) {
+            throw new Exception("Bonus not found");
+        }
+
         Bonus bonus = bonusOpt.get();
 
         User user = userRepository.find(userId);
