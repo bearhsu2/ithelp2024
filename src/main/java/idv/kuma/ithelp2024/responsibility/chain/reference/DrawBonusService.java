@@ -9,10 +9,12 @@ public class DrawBonusService {
 
     private final UserRepository userRepository;
     private final BonusRepository bonusRepository;
+    private final DrawBonusRecordRepository drawBonusRecordRepository;
 
-    public DrawBonusService(UserRepository userRepository, BonusRepository bonusRepository) {
+    public DrawBonusService(UserRepository userRepository, BonusRepository bonusRepository, DrawBonusRecordRepository drawBonusRecordRepository) {
         this.userRepository = userRepository;
         this.bonusRepository = bonusRepository;
+        this.drawBonusRecordRepository = drawBonusRecordRepository;
     }
 
     // 建立一個 Bonus 物件
@@ -22,6 +24,12 @@ public class DrawBonusService {
     // 如果還沒領過，則領取，並新增一筆領取紀錄
     public void draw(long userId, String bonusCode) throws Exception {
 
+
+        Optional<DrawBonusRecord> drawBonusRecordOpt = drawBonusRecordRepository.find(userId, bonusCode);
+        if (drawBonusRecordOpt.isPresent()) {
+            throw new Exception("Already drawn");
+        }
+
         Bonus bonus = bonusRepository.findByCode(bonusCode)
                 .orElseThrow(() -> new Exception("Bonus not found"));
 
@@ -29,6 +37,9 @@ public class DrawBonusService {
                 .orElseThrow(() -> new Exception("User not found"));
 
         user.getWallet().add(bonus.bonusAmount());
+
+        DrawBonusRecord drawBonusRecord = new DrawBonusRecord(userId, bonusCode);
+        drawBonusRecordRepository.save(drawBonusRecord);
 
         userRepository.save(user);
 
