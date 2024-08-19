@@ -5,18 +5,15 @@ import java.util.List;
 import java.util.Optional;
 
 public class FakeDrawBonusRecordRepository implements DrawBonusRecordRepository {
-    private List<DrawBonusRecord> records = new ArrayList<>();
+    private final List<DrawBonusRecord> records = new ArrayList<>();
 
     @Override
     public Optional<DrawBonusRecord> find(long userId, String bonusCode) {
 
-        for (DrawBonusRecord record : records) {
-            if (record.getUserId() == userId && record.getBonusCode().equals(bonusCode)) {
-                return Optional.of(record);
-            }
-        }
+        return records.stream()
+                .filter(oneRecord -> oneRecord.getUserId() == userId && oneRecord.getBonusCode().equals(bonusCode))
+                .findFirst();
 
-        return Optional.empty();
     }
 
     @Override
