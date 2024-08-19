@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 @Disabled
-class AddInvitationServiceTest {
+class AcceptInvitationServiceTest {
 
     private UserRepository userRepository = new DummyUserRepository();
     private UserInvitationRepository userInvitationRepository = new FakeUserInvitationRepository();
