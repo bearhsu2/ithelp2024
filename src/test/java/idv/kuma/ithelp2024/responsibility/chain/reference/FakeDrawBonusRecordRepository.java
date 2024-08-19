@@ -11,7 +11,7 @@ public class FakeDrawBonusRecordRepository implements DrawBonusRecordRepository 
     public Optional<DrawBonusRecord> find(long userId, String bonusCode) {
 
         return records.stream()
-                .filter(oneRecord -> oneRecord.getUserId() == userId && oneRecord.getBonusCode().equals(bonusCode))
+                .filter(oneRecord -> oneRecord.matches(userId, bonusCode))
                 .findFirst();
 
     }

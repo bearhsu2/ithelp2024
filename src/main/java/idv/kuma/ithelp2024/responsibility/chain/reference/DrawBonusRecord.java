@@ -12,4 +12,8 @@ public class DrawBonusRecord {
         this.userId = userId;
         this.bonusCode = bonusCode;
     }
+
+    boolean matches(long userId, String bonusCode) {
+        return this.userId == userId && this.bonusCode.equals(bonusCode);
+    }
 }
